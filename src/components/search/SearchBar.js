@@ -64,7 +64,6 @@ function Search() {
     setInput("");
     setBarOpened(false);
     // After form submit, do what you want with the input value
-    console.log(`Form was submited with input: ${input}`);
     dispatch(getPostcodeCoordinates(input))
   };
 

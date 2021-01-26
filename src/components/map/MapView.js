@@ -20,7 +20,6 @@ const MapView = ({breweries}) => {
 
   useEffect(() => {
     if(breweryStore.closest) {
-      console.log('brewery store has closest property', breweryStore.closest);
       setShowSearchResults(true);
     }
   }, [breweryStore])
@@ -47,8 +46,8 @@ const MapView = ({breweries}) => {
           <LayersControl.Overlay checked name="Search">
             <LayerGroup>
                 <SearchBar/>
-                <SearchResultModal showModal={showSearchResults} setShowModal={setShowSearchResults} result={breweryStore.closest}/>
             </LayerGroup>
+            <SearchResultModal showModal={showSearchResults} setShowModal={setShowSearchResults} result={breweryStore.closest}/>
           </LayersControl.Overlay>
           <LayersControl.Overlay checked name="Breweries">
             <LayerGroup>

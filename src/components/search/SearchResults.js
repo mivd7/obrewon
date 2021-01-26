@@ -65,7 +65,6 @@ const CloseModalButton = styled.img`
 `;
 
 const SearchResultModal = ({showModal, setShowModal, result}) => {
-  console.log(result);
   const modalRef = useRef();
 
   const animation = useSpring({
