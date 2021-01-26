@@ -1,13 +1,14 @@
 import MapView from './components/map/MapView';
 import './App.css';
 import breweries from './data/breweries';
+import { Provider } from 'react-redux';
+import store from './store';
 
 function App() {
   return (
-    <div className="App">
-      {/* <LayerTest/> */}
+    <Provider store={store}>
       <MapView breweries={breweries} />
-    </div>
+    </Provider>
   );
 }
 export default App;

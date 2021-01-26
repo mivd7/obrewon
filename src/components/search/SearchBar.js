@@ -1,5 +1,7 @@
 import React, { useState, useRef } from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { getPostcodeCoordinates } from "../../actions/brewery";
 
 const Form = styled.form`
   position: relative;
@@ -36,7 +38,7 @@ const Input = styled.input`
     outline: none;
   }
   &::placeholder {
-    color: black;
+    color: grey;
   }
 `;
 
@@ -55,7 +57,7 @@ function Search() {
   const [barOpened, setBarOpened] = useState(false);
   const formRef = useRef();
   const inputFocus = useRef();
-
+  const dispatch = useDispatch();
   const onFormSubmit = e => {
     // When form submited, clear input, close the searchbar and do something with input
     e.preventDefault();
@@ -63,9 +65,10 @@ function Search() {
     setBarOpened(false);
     // After form submit, do what you want with the input value
     console.log(`Form was submited with input: ${input}`);
+    dispatch(getPostcodeCoordinates(input))
   };
 
-  return (
+  return (<>
       <Form
         barOpened={barOpened}
         onClick={() => {
@@ -86,9 +89,9 @@ function Search() {
         onSubmit={onFormSubmit}
         ref={formRef}
       >
-        <Button type="submit" barOpened={barOpened}>
+        {!barOpened && <Button type="submit" barOpened={barOpened}>
           Search Brewery
-        </Button>
+        </Button>}
         <Input
           onChange={e => setInput(e.target.value)}
           ref={inputFocus}
@@ -97,6 +100,8 @@ function Search() {
           placeholder="Search by postcode"
         />
       </Form>
+      
+    </>
   );
 }
 

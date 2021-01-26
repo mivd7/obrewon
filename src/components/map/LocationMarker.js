@@ -5,7 +5,7 @@ import L from 'leaflet';
 
 L.Icon.Default.imagePath='img/'
 
-function LocationMarker({ markerPosition }) {
+function LocationMarker({ markerPosition, brewery }) {
   const [position, setPosition] = useState([markerPosition.lat, markerPosition.lng])
   const map = useMapEvents({
     click() {
@@ -19,7 +19,16 @@ function LocationMarker({ markerPosition }) {
 
   return position === null ? null : (
     <Marker position={position}>
-      <Popup>You are here!</Popup>
+      {brewery && 
+      <Popup>
+        <h1>{brewery.name}</h1>
+        <p>{brewery.zipcode}</p>
+        <p>{brewery.address}</p>
+      </Popup>}
+      {!brewery && 
+        <Popup>
+          You are here
+        </Popup>}
     </Marker>
   )
 }
