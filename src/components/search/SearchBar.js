@@ -52,7 +52,7 @@ const Button = styled.button`
   color: black;
 `;
 
-function Search() {
+function SearchBar() {
   const [input, setInput] = useState("");
   const [barOpened, setBarOpened] = useState(false);
   const formRef = useRef();
@@ -99,4 +99,4 @@ function Search() {
   );
 }
 
-export default Search;
+export default SearchBar;

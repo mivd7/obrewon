@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { LayerGroup, LayersControl, MapContainer, TileLayer } from 'react-leaflet'
+import { LayerGroup, LayersControl, MapContainer, TileLayer, useMap, useMapEvent } from 'react-leaflet'
 import { useDispatch, useSelector } from 'react-redux';
+
+import ViewControl from './ViewControl';
 import SearchBar from '../search/SearchBar';
-import Brewery from './Brewery';
+import Brewery from '../locations/Brewery';
 import LocationMarker from './LocationMarker';
+
 import {setBreweries} from '../../actions/brewery';
-import SearchResultModal from '../search/SearchResults';
+// import SearchResultModal from '../search/SearchResults';
 
 const MapView = ({breweries}) => {
   const [currentLocation, setCurrentLocation] = useState({lat: 52.3389066, lng: 4.9415677});
@@ -14,15 +17,20 @@ const MapView = ({breweries}) => {
   const dispatch = useDispatch();
   const breweryStore = useSelector(state => state.brewery);
 
+  // const onShowModal = () => {
+  //   setShowSearchResults(!showSearchResults)
+  //   setCurrentLocation({lat: 52.3666601, lng: 4.9263454});
+  // }
+
   useEffect(() => {
     dispatch(setBreweries(breweries))
-  }, [])
+  }, [dispatch, breweries]);
 
   useEffect(() => {
     if(breweryStore.closest) {
       setShowSearchResults(true);
     }
-  }, [breweryStore])
+  }, [breweryStore]);
 
   return (<>
     {currentLocation && currentLocation.lat && 
@@ -30,6 +38,7 @@ const MapView = ({breweries}) => {
         center={currentLocation}
         zoom={zoom}
         scrollWheelZoom={true}>
+        {showSearchResults ? <ViewControl center={{lat: breweryStore.closest.locationProperties.lat, lng: breweryStore.closest.locationProperties.lng }} zoom={zoom}/> : <ViewControl center={currentLocation} zoom={zoom}/> }
         <LayersControl position="topright">
           <LayersControl.BaseLayer checked name="OpenStreetMap.Mapnik">
             <TileLayer
@@ -47,7 +56,7 @@ const MapView = ({breweries}) => {
             <LayerGroup>
                 <SearchBar/>
             </LayerGroup>
-            <SearchResultModal showModal={showSearchResults} setShowModal={setShowSearchResults} result={breweryStore.closest}/>
+            {/* <SearchResultModal showModal={showSearchResults} onShowModal={onShowModal} result={breweryStore.closest}/> */}
           </LayersControl.Overlay>
           <LayersControl.Overlay checked name="Breweries">
             <LayerGroup>

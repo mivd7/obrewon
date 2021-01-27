@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useMapEvents } from 'react-leaflet';
 import { Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 
 L.Icon.Default.imagePath='img/'
 
-function LocationMarker({ markerPosition, brewery }) {
-  const [position, setPosition] = useState([markerPosition.lat, markerPosition.lng])
+function LocationMarker({ markerPosition, brewery, closest }) {
+  const markerRef = useRef(null);
+  const [position, setPosition] = useState([markerPosition.lat, markerPosition.lng]);
+
   const map = useMapEvents({
     click() {
       map.locate()
@@ -17,8 +19,14 @@ function LocationMarker({ markerPosition, brewery }) {
     },
   })
 
+  useEffect(() => {
+    if(closest) {
+      markerRef.current.openPopup();
+    }
+  }, [closest]);
+
   return position === null ? null : (
-    <Marker position={position}>
+    <Marker ref={markerRef} position={position} popupOpen={closest}>
       {brewery && 
       <Popup>
         <h1>{brewery.name}</h1>
