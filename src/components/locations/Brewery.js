@@ -8,7 +8,7 @@ const Brewery = ({brewery}) => {
   const breweryStore = useSelector(state => state.brewery);
   
   useEffect(() => {
-    if(breweryStore.closest && breweryStore.closest.name == brewery.name) {
+    if(breweryStore.searchResult && breweryStore.searchResult.name == brewery.name) {
       setIsClosest(true);
     }
   }, [breweryStore, brewery]);

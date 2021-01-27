@@ -3,12 +3,26 @@ import { useMapEvents } from 'react-leaflet';
 import { Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 
+import pointingDown from '../../assets/you-are-here-marker.svg';
+
 L.Icon.Default.imagePath='img/'
+
+const pointingDownIcon = new L.Icon({
+    iconUrl: pointingDown,
+    iconRetinaUrl: pointingDown,
+    iconSize: [32, 40],
+    iconAnchor: [16, 40],
+    popupAnchor: [1,-15],
+    shadowUrl: null,
+    shadowSize: null,
+    shadowAnchor: null,
+    className: 'leaflet-div-icon'
+});
 
 function LocationMarker({ markerPosition, brewery, closest }) {
   const markerRef = useRef(null);
-  const [position, setPosition] = useState([markerPosition.lat, markerPosition.lng]);
-
+  const [position, setPosition] = useState(null);
+  
   const map = useMapEvents({
     click() {
       map.locate()
@@ -20,25 +34,32 @@ function LocationMarker({ markerPosition, brewery, closest }) {
   })
 
   useEffect(() => {
-    if(closest) {
+    if(closest && markerRef.current) {    
       markerRef.current.openPopup();
     }
-  }, [closest]);
+  }, [closest, markerRef]);
 
-  return position === null ? null : (
-    <Marker ref={markerRef} position={position} popupOpen={closest}>
-      {brewery && 
-      <Popup>
-        <h1>{brewery.name}</h1>
-        <p>{brewery.zipcode}</p>
-        <p>{brewery.address}</p>
-      </Popup>}
-      {!brewery && 
+  useEffect(() => {
+    //watch position change of marker
+    setPosition([markerPosition.lat, markerPosition.lng])
+  }, [markerPosition])
+
+  return position === null ? null : (<>
+    {brewery ? 
+      <Marker ref={markerRef} position={position} popupOpen={closest}>
         <Popup>
-          You are here
-        </Popup>}
-    </Marker>
-  )
+          <h1>{brewery.name}</h1>
+          <p>{brewery.zipcode}</p>
+          <p>{brewery.address}</p>
+        </Popup>
+      </Marker> :
+      <Marker ref={markerRef} position={position} icon={pointingDownIcon}>
+        <Popup>
+          You are here!
+        </Popup>
+      </Marker>
+    }
+  </>)
 }
 
 export default LocationMarker;

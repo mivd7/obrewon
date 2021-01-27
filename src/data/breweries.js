@@ -25,8 +25,8 @@ const data = [{
   "open": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
   "zipcode": "2011 WB",
   "locationProperties": {
-    lat: 52.2901413,
-    lng: 4.6297883
+    lat: 52.3812085, 
+    lng: 4.62981776649286
   }
 }, {
   "address": "Pratumplaats 2A",
@@ -55,8 +55,8 @@ const data = [{
   "open": ["Tuesday", "Wednesday", "Thursday", "Friday"],
   "zipcode": "2800",
   "locationProperties": {
-    lat: 51.031589350000004,
-    lng: 4.472870571558167
+    lat: 51.90867233276367,
+    lng: 4.448819160461426
   }
 }, {
   "address": "Achterweg 22",

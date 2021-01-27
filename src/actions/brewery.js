@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 export const BREWERIES_SET = 'BREWERIES_SET';
-export const POSTCODE_QUERY_MADE = 'POSTCODE_QUERY_MADE';
+export const INPUT_LOCATION_SET = 'INPUT_LOCATION_SET';
+export const INPUT_LOCATION_NOT_FOUND = 'INPUT_LOCATION_NOT_FOUND';
 
 export function setBreweries(payload) {
   return {
@@ -10,10 +11,16 @@ export function setBreweries(payload) {
   }
 }
 
-export function makePostcodeQuery(payload) {
+export function setInputLocation(payload) {
   return {
-    type: POSTCODE_QUERY_MADE,
+    type: INPUT_LOCATION_SET,
     payload
+  }
+}
+
+export function setNotFoundError() {
+  return {
+    type: INPUT_LOCATION_NOT_FOUND,
   }
 }
 
@@ -22,9 +29,9 @@ export const getPostcodeCoordinates = (request) => (dispatch) => {
     await axios.get(`https://api.geoapify.com/v1/geocode/search?text=${request}&apiKey=4680392dcd4944afad13f1d18834846e`)
       .then(res => {
         if (res.data.features.length > 0) {
-          dispatch(makePostcodeQuery(res.data.features[0].properties))
+          dispatch(setInputLocation(res.data.features[0].properties))
         } else {
-          console.log('no results found for input')
+          dispatch(setNotFoundError())
         }
       })
       .catch(err => console.error(err))

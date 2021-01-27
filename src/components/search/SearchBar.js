@@ -91,7 +91,7 @@ function SearchBar() {
           ref={inputFocus}
           value={input}
           barOpened={barOpened}
-          placeholder="Search by postcode"
+          placeholder="Search by postcode, address or city"
         />
       </Form>
       
