@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { getPostcodeCoordinates } from "../../actions/brewery";
@@ -58,33 +58,28 @@ function Search() {
   const formRef = useRef();
   const inputFocus = useRef();
   const dispatch = useDispatch();
+
   const onFormSubmit = e => {
-    // When form submited, clear input, close the searchbar and do something with input
     e.preventDefault();
     setInput("");
     setBarOpened(false);
-    // After form submit, do what you want with the input value
     dispatch(getPostcodeCoordinates(input))
   };
-
+  
   return (<>
       <Form
         barOpened={barOpened}
         onClick={() => {
-          // When form clicked, set state of baropened to true and focus the input
           setBarOpened(true);
           inputFocus.current.focus();
         }}
-        // on focus open search bar
         onFocus={() => {
           setBarOpened(true);
           inputFocus.current.focus();
         }}
-        // on blur close search bar
         onBlur={() => {
           setBarOpened(false);
         }}
-        // On submit, call the onFormSubmit function
         onSubmit={onFormSubmit}
         ref={formRef}
       >

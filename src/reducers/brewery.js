@@ -15,7 +15,6 @@ export default function (state = {}, action = {}) {
       } else {
         return state;
       }
-      
     default:
       return state;
   }

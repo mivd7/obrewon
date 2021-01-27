@@ -64,7 +64,7 @@ const CloseModalButton = styled.img`
   z-index: 10;
 `;
 
-const SearchResultModal = ({showModal, setShowModal, result}) => {
+const SearchResultModal = ({showModal, onShowModal, result}) => {
   const modalRef = useRef();
 
   const animation = useSpring({
@@ -77,7 +77,7 @@ const SearchResultModal = ({showModal, setShowModal, result}) => {
 
   const closeModal = e => {
     if (modalRef.current === e.target) {
-      setShowModal(false);
+      onShowModal();
     }
   };
 
@@ -96,7 +96,7 @@ const SearchResultModal = ({showModal, setShowModal, result}) => {
               <CloseModalButton
                 aria-label='Close modal'
                 src={close}
-                onClick={() => setShowModal(prev => !prev)}
+                onClick={() => onShowModal()}
               />
             </ModalWrapper>
           </animated.div>
