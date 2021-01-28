@@ -1,8 +1,9 @@
 import { useMap } from "react-leaflet";
 import L from 'leaflet';
 
-export default function ViewControl({center, zoom, bounds}) {
+export default function ViewControl({ bounds }) {
   const map = useMap();
+
   if(bounds) {
     const southWest = new L.LatLng(bounds.southernmost.lat, bounds.southernmost.lng)
     const northEast = new L.LatLng(bounds.northernmost.lat, bounds.northernmost.lng)

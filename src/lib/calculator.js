@@ -16,22 +16,25 @@ function deg2rad(deg) {
   return deg * (Math.PI/180)
 }
 
-export function getSearchMapBounds(searchLocationCoords, searchResultCoords) {
+export function getMapBounds(coords) {
   return {
-    northernmost: findNorthernmostPoint([searchLocationCoords, searchResultCoords]),
-    southernmost: findSouthernmostPoint([searchLocationCoords, searchResultCoords])
+    northernmost: findNorthernmostPoint(coords),
+    southernmost: findSouthernmostPoint(coords)
   }
 }
+
 function findNorthernmostPoint(locationProperties) {
-  const result = locationProperties.reduce(function(prev, current) {
-    return (prev.lng < current.lng) ? prev : current
+  return locationProperties.reduce(function(prev, current) {
+    const currentLongtitude = current.lng || current.lon;
+    const prevLongtitude = prev.lng || prev.lon;
+    return (prevLongtitude < currentLongtitude) ? prev : current
   })
-  return result;
 }
 
 function findSouthernmostPoint(locationProperties) {
-  const result = locationProperties.reduce(function(prev, current) {
-    return (prev.lng > current.lng) ? prev : current
+  return locationProperties.reduce(function(prev, current) {
+    const currentLongtitude = current.lng || current.lon
+    const prevLongtitude = prev.lng || prev.lon;
+    return (prevLongtitude > currentLongtitude) ? prev : current
   })
-  return result;
 }

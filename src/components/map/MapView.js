@@ -8,22 +8,19 @@ import Brewery from '../locations/Brewery';
 import LocationMarker from '../locations/LocationMarker';
 import {setBreweries} from '../../actions/brewery';
 import MapBackground from './MapBackground';
-import { getSearchMapBounds } from '../../lib/calculator';
+import { getMapBounds } from '../../lib/calculator';
 const { Overlay } = LayersControl;
 
 const MapView = ({breweries}) => {
-  const [currentLocation] = useState({lat: 52.3727598, lng: 4.8936041});
-  const [zoom] = useState(14);
+  const [currentLocation ] = useState({lat: 52.100833, lng: 5.646111});
+  const [zoom] = useState(8);
   const [mapBounds, setMapBounds] = useState(null);
   const [showSearchResults, setShowSearchResults] = useState(false);
-  const markerGroupRef = useRef();
+  const markerGroupRef = useRef(null);
   const dispatch = useDispatch();
   const breweryStore = useSelector(state => state.brewery);
 
-  useEffect(() => {
-    
-  }, [])
-
+  
   useEffect(() => {
     dispatch(setBreweries(breweries))
   }, [dispatch, breweries]);
@@ -31,27 +28,25 @@ const MapView = ({breweries}) => {
   useEffect(() => {
     if(breweryStore.searchResult) {
       setShowSearchResults(true); 
-      const bounds = getSearchMapBounds({
+      const bounds = getMapBounds([{
         lat: breweryStore.searchLocation.lat,
         lng: breweryStore.searchLocation.lon
       }, {
         lat: breweryStore.searchResult.locationProperties.lat,
         lng: breweryStore.searchResult.locationProperties.lng
-      })
+      }])
       setMapBounds(bounds);
     }
   }, [breweryStore]);
 
   return (<>
-    {currentLocation && currentLocation.lat &&
       <MapContainer
         center={currentLocation}
         zoom={zoom}
-        bounds={markerGroupRef.current ? markerGroupRef.current.getBounds() : null}
         scrollWheelZoom={true}>
         {showSearchResults ? 
           <ViewControl center={{lat: breweryStore.searchResult.locationProperties.lat, lng: breweryStore.searchResult.locationProperties.lng }} zoom={zoom} bounds={mapBounds}/> : 
-          <ViewControl center={currentLocation} zoom={zoom}  /> }
+          <ViewControl center={currentLocation} zoom={zoom} bounds={mapBounds}/> }
         <LayersControl position="topright">
           <MapBackground/>
           <Overlay checked name="Search">
@@ -59,7 +54,7 @@ const MapView = ({breweries}) => {
                 <SearchBar/>
             </LayerGroup>
           </Overlay>
-          <Overlay checked name="Markers">
+          <Overlay checked name="Markers" >
             <FeatureGroup ref={markerGroupRef}>
               {breweries && breweries.map(brewery => <Brewery key={breweries.indexOf(brewery)} brewery={brewery}/>)}
             </FeatureGroup>
@@ -68,7 +63,7 @@ const MapView = ({breweries}) => {
             </FeatureGroup>
           </Overlay>
         </LayersControl>
-      </MapContainer>}
+      </MapContainer>
       </>
     );
   }
