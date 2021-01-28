@@ -1,7 +1,7 @@
 import { LayersControl, TileLayer } from "react-leaflet";
+const { BaseLayer } = LayersControl;
 
 const MapBackground = () => {
-  const { BaseLayer } = LayersControl;
   return(<>
     <BaseLayer checked name="OpenStreetMap.Mapnik">
       <TileLayer

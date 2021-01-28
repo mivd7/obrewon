@@ -5,9 +5,7 @@ import { beerIcon, animatedBeerIcon } from '../../lib/icons';
 function BreweryMarker({ markerPosition, brewery, closest }) {
   const markerRef = useRef(null);
   const [position, setPosition] = useState(null);
-  function changeIcon() {
-    
-  }
+
   useEffect(() => {
     setPosition([markerPosition.lat, markerPosition.lng])
   }, [markerPosition])

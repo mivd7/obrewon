@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { LayerGroup, LayersControl, MapContainer, TileLayer } from 'react-leaflet'
+import { LayerGroup, LayersControl, MapContainer } from 'react-leaflet'
 import { useDispatch, useSelector } from 'react-redux';
 
 import ViewControl from './ViewControl';
@@ -9,10 +9,11 @@ import LocationMarker from '../locations/LocationMarker';
 import {setBreweries} from '../../actions/brewery';
 import MapBackground from './MapBackground';
 // import SearchResultModal from '../search/SearchResults';
+const { Overlay } = LayersControl;
 
 const MapView = ({breweries}) => {
-  const [currentLocation, setCurrentLocation] = useState({lat: 52.3727598, lng: 4.8936041});
-  const [zoom, setZoom] = useState(14);
+  const [currentLocation] = useState({lat: 52.3727598, lng: 4.8936041});
+  const [zoom] = useState(14);
   const [showSearchResults, setShowSearchResults] = useState(false);
   const dispatch = useDispatch();
   const breweryStore = useSelector(state => state.brewery);
@@ -21,7 +22,7 @@ const MapView = ({breweries}) => {
     [52.505, 29.09],
   ]
   
-  const { Overlay } = LayersControl;
+
   useEffect(() => {
     dispatch(setBreweries(breweries))
   }, [dispatch, breweries]);
