@@ -10,3 +10,17 @@
   background: none;
   border: none;
 }
+
+@keyframes fade { 
+  from { opacity: 0.5; } 
+}
+
+.animated-beer-icon {
+  animation: bounce .3s ease infinite alternate;
+}
+
+@keyframes bounce {
+  100% {
+    top: -20px;
+  }
+}
