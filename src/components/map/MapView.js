@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ViewControl from './ViewControl';
 import SearchBar from '../search/SearchBar';
 import Brewery from '../locations/Brewery';
-import LocationMarker from './LocationMarker';
+import LocationMarker from '../locations/LocationMarker';
 
 import {setBreweries} from '../../actions/brewery';
 // import SearchResultModal from '../search/SearchResults';
@@ -65,11 +65,11 @@ const MapView = ({breweries}) => {
               {breweries && breweries.map(brewery => <Brewery key={breweries.indexOf(brewery)} brewery={brewery}/>)}
             </LayerGroup>
           </LayersControl.Overlay>
-          {breweryStore && breweryStore.searchLocation && <LayersControl.Overlay checked name="Input Location">
+         <LayersControl.Overlay checked name="Input Location">
             <LayerGroup>
-              <LocationMarker markerPosition={{lat: breweryStore.searchLocation.lat, lng: breweryStore.searchLocation.lon}}/>
+            {breweryStore && breweryStore.searchLocation &&  <LocationMarker markerPosition={{lat: breweryStore.searchLocation.lat, lng: breweryStore.searchLocation.lon}}/>}
             </LayerGroup>
-          </LayersControl.Overlay>}
+          </LayersControl.Overlay>
         </LayersControl>
       </MapContainer>}
       </>
