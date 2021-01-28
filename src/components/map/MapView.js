@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FeatureGroup, LayerGroup, LayersControl, MapContainer } from 'react-leaflet'
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -13,14 +13,19 @@ const { Overlay } = LayersControl;
 
 const MapView = ({breweries}) => {
   const [currentLocation ] = useState({lat: 52.100833, lng: 5.646111});
-  const [zoom] = useState(8);
+  const [zoom] = useState(15);
   const [mapBounds, setMapBounds] = useState(null);
   const [showSearchResults, setShowSearchResults] = useState(false);
-  const markerGroupRef = useRef(null);
+  const [markerGroupRef, setMarkerGroupRef] = useState(null);
   const dispatch = useDispatch();
   const breweryStore = useSelector(state => state.brewery);
 
-  
+  useEffect(() => {
+    if(markerGroupRef) {
+      setMapBounds(markerGroupRef.getBounds())
+    }
+  }, [markerGroupRef])
+
   useEffect(() => {
     dispatch(setBreweries(breweries))
   }, [dispatch, breweries]);
@@ -46,7 +51,7 @@ const MapView = ({breweries}) => {
         scrollWheelZoom={true}>
         {showSearchResults ? 
           <ViewControl center={{lat: breweryStore.searchResult.locationProperties.lat, lng: breweryStore.searchResult.locationProperties.lng }} zoom={zoom} bounds={mapBounds}/> : 
-          <ViewControl center={currentLocation} zoom={zoom} bounds={mapBounds}/> }
+          <ViewControl center={currentLocation} zoom={zoom} initialBounds={mapBounds}/> }
         <LayersControl position="topright">
           <MapBackground/>
           <Overlay checked name="Search">
@@ -55,11 +60,9 @@ const MapView = ({breweries}) => {
             </LayerGroup>
           </Overlay>
           <Overlay checked name="Markers" >
-            <FeatureGroup ref={markerGroupRef}>
+            <FeatureGroup ref={ref => setMarkerGroupRef(ref)}>
               {breweries && breweries.map(brewery => <Brewery key={breweries.indexOf(brewery)} brewery={brewery}/>)}
-            </FeatureGroup>
-            <FeatureGroup >
-               {breweryStore && breweryStore.searchLocation &&  <LocationMarker markerPosition={{lat: breweryStore.searchLocation.lat, lng: breweryStore.searchLocation.lon}}/>}
+              {breweryStore && breweryStore.searchLocation &&  <LocationMarker markerPosition={{lat: breweryStore.searchLocation.lat, lng: breweryStore.searchLocation.lon}}/>}
             </FeatureGroup>
           </Overlay>
         </LayersControl>
