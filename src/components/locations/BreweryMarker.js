@@ -16,11 +16,8 @@ function BreweryMarker({ markerPosition, brewery, closest }) {
         position={position} 
         icon={closest ? animatedBeerIcon : beerIcon}
         eventHandlers={{
-          click: (e) => {
-            console.log('marker clicked', e);
-            // if(closest) {
-              markerRef.current.setIcon(beerIcon)
-            // }
+          click: () => {
+            markerRef.current.setIcon(beerIcon)
           },
         }}>
         <Popup>

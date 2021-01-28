@@ -15,3 +15,26 @@ export function getDistanceInKm(lat1,lon1,lat2,lon2) {
 function deg2rad(deg) {
   return deg * (Math.PI/180)
 }
+
+export function getMapBounds(coords) {
+  return {
+    northernmost: findNorthernmostPoint(coords),
+    southernmost: findSouthernmostPoint(coords)
+  }
+}
+
+function findNorthernmostPoint(locationProperties) {
+  return locationProperties.reduce(function(prev, current) {
+    const currentLongtitude = current.lng || current.lon;
+    const prevLongtitude = prev.lng || prev.lon;
+    return (prevLongtitude < currentLongtitude) ? prev : current
+  })
+}
+
+function findSouthernmostPoint(locationProperties) {
+  return locationProperties.reduce(function(prev, current) {
+    const currentLongtitude = current.lng || current.lon
+    const prevLongtitude = prev.lng || prev.lon;
+    return (prevLongtitude > currentLongtitude) ? prev : current
+  })
+}

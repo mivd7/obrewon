@@ -55,8 +55,8 @@ const data = [{
   "open": ["Tuesday", "Wednesday", "Thursday", "Friday"],
   "zipcode": "2800",
   "locationProperties": {
-    lat: 51.90867233276367,
-    lng: 4.448819160461426
+    lat: 51.031589350000004,
+    lng: 4.472870571558167
   }
 }, {
   "address": "Achterweg 22",
