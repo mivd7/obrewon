@@ -32,7 +32,6 @@ const Input = styled.input`
   border: none;
   color: black;
   transition: margin 300ms cubic-bezier(0.645, 0.045, 0.355, 1);
-
   &:focus,
   &:active {
     outline: none;
@@ -71,11 +70,15 @@ function SearchBar() {
         barOpened={barOpened}
         onClick={() => {
           setBarOpened(true);
-          inputFocus.current.focus();
+          if(inputFocus.current) {
+            inputFocus.current.focus();
+          }
         }}
         onFocus={() => {
           setBarOpened(true);
-          inputFocus.current.focus();
+          if(inputFocus.current) {
+            inputFocus.current.focus();
+          }
         }}
         onBlur={() => {
           setBarOpened(false);
@@ -84,15 +87,15 @@ function SearchBar() {
         ref={formRef}
       >
         {!barOpened && <Button type="submit" barOpened={barOpened}>
-          Search Brewery
+          Click to search
         </Button>}
-        <Input
+       { barOpened && <Input
           onChange={e => setInput(e.target.value)}
           ref={inputFocus}
           value={input}
           barOpened={barOpened}
           placeholder="Search by postcode, address or city"
-        />
+        />}
       </Form>
       
     </>

@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useMapEvents } from 'react-leaflet';
 import { Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 
 import pointingDown from '../../assets/you-are-here-marker.svg';
+import BreweryPopup from '../locations/BreweryPopup';
 
 L.Icon.Default.imagePath='img/'
 
@@ -33,11 +34,15 @@ function LocationMarker({ markerPosition, brewery, closest }) {
     },
   })
 
-  useEffect(() => {
-    if(closest && markerRef.current) {    
+  function openPopup(closest) {
+    if(closest) {
       markerRef.current.openPopup();
     }
-  }, [closest, markerRef]);
+  }
+
+  useCallback(
+    openPopup(closest)
+  , [closest]);
 
   useEffect(() => {
     //watch position change of marker
@@ -47,11 +52,7 @@ function LocationMarker({ markerPosition, brewery, closest }) {
   return position === null ? null : (<>
     {brewery ? 
       <Marker ref={markerRef} position={position} popupOpen={closest}>
-        <Popup>
-          <h1>{brewery.name}</h1>
-          <p>{brewery.zipcode}</p>
-          <p>{brewery.address}</p>
-        </Popup>
+        <BreweryPopup brewery={brewery}/>
       </Marker> :
       <Marker ref={markerRef} position={position} icon={pointingDownIcon}>
         <Popup>

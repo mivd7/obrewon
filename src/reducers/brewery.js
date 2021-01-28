@@ -4,7 +4,6 @@ import {getDistanceInKm} from '../lib/calculator';
 export default function (state = {}, action = {}) {
   switch (action.type) {
     case BREWERIES_SET:
-      // console.log('SET_BREWERIES',action.payload);
       return {...state, breweries: action.payload};
     case INPUT_LOCATION_SET:
       delete state.searchLocation;

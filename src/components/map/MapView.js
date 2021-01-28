@@ -65,9 +65,12 @@ const MapView = ({breweries}) => {
               {breweries && breweries.map(brewery => <Brewery key={breweries.indexOf(brewery)} brewery={brewery}/>)}
             </LayerGroup>
           </LayersControl.Overlay>
+          {breweryStore && breweryStore.searchLocation && <LayersControl.Overlay checked name="Input Location">
+            <LayerGroup>
+              <LocationMarker markerPosition={{lat: breweryStore.searchLocation.lat, lng: breweryStore.searchLocation.lon}}/>
+            </LayerGroup>
+          </LayersControl.Overlay>}
         </LayersControl>
-        {breweryStore && breweryStore.searchLocation && <LocationMarker markerPosition={{lat: breweryStore.searchLocation.lat, lng: breweryStore.searchLocation.lon}}/>}
-
       </MapContainer>}
       </>
     );
