@@ -1,20 +1,22 @@
-import { BREWERIES_SET, POSTCODE_QUERY_MADE } from '../actions/brewery';
+import { BREWERIES_SET, INPUT_LOCATION_SET, INPUT_LOCATION_NOT_FOUND } from '../actions/brewery';
 import {getDistanceInKm} from '../lib/calculator';
 
 export default function (state = {}, action = {}) {
   switch (action.type) {
     case BREWERIES_SET:
-      // console.log('SET_BREWERIES',action.payload);
       return {...state, breweries: action.payload};
-    case POSTCODE_QUERY_MADE:
+    case INPUT_LOCATION_SET:
+      delete state.searchLocation;
       if(state.breweries && state.breweries.length > 0) {
         const breweriesByDistance = state.breweries.map(brewery => {
           return {...brewery, distance: getDistanceInKm(brewery.locationProperties.lat, brewery.locationProperties.lng, action.payload.lat, action.payload.lon)}
         }).sort((a,b) => a.distance - b.distance);
-        return {...state, closest: breweriesByDistance[0]};
+        return {...state, searchResult: breweriesByDistance[0], searchLocation: action.payload};
       } else {
         return state;
       }
+    case INPUT_LOCATION_NOT_FOUND:
+      return {...state, searchError: 'Input location not found' }
     default:
       return state;
   }

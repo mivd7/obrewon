@@ -1,7 +1,8 @@
 import { useMap } from "react-leaflet";
 
-export default function ViewControl({center, zoom}) {
+export default function ViewControl({center, zoom, outerBounds}) {
   const map = useMap();
-  map.setView(center, zoom);
+  map.flyTo(center, zoom);
+  // map.fitBounds(outerBounds)
   return null;
 }
