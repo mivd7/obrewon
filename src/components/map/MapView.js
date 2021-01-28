@@ -6,8 +6,8 @@ import ViewControl from './ViewControl';
 import SearchBar from '../search/SearchBar';
 import Brewery from '../locations/Brewery';
 import LocationMarker from '../locations/LocationMarker';
-
 import {setBreweries} from '../../actions/brewery';
+import MapBackground from './MapBackground';
 // import SearchResultModal from '../search/SearchResults';
 
 const MapView = ({breweries}) => {
@@ -21,6 +21,7 @@ const MapView = ({breweries}) => {
     [52.505, 29.09],
   ]
   
+  const { Overlay } = LayersControl;
   useEffect(() => {
     dispatch(setBreweries(breweries))
   }, [dispatch, breweries]);
@@ -42,34 +43,23 @@ const MapView = ({breweries}) => {
           <ViewControl center={{lat: breweryStore.searchResult.locationProperties.lat, lng: breweryStore.searchResult.locationProperties.lng }} zoom={zoom} outerBounds={outerBounds}/> : 
           <ViewControl center={currentLocation} zoom={zoom} outerBounds={outerBounds}/> }
         <LayersControl position="topright">
-          <LayersControl.BaseLayer checked name="OpenStreetMap.Mapnik">
-            <TileLayer
-              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-          </LayersControl.BaseLayer>
-          <LayersControl.BaseLayer name="OpenStreetMap.BlackAndWhite">
-            <TileLayer
-              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-              url="https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
-            />
-          </LayersControl.BaseLayer>
-          <LayersControl.Overlay checked name="Search">
+          <MapBackground/>
+          <Overlay checked name="Search">
             <LayerGroup>
                 <SearchBar/>
             </LayerGroup>
             {/* <SearchResultModal showModal={showSearchResults} onShowModal={onShowModal} result={breweryStore.searchResult}/> */}
-          </LayersControl.Overlay>
-          <LayersControl.Overlay checked name="Breweries">
+          </Overlay>
+          <Overlay checked name="Breweries">
             <LayerGroup>
               {breweries && breweries.map(brewery => <Brewery key={breweries.indexOf(brewery)} brewery={brewery}/>)}
             </LayerGroup>
-          </LayersControl.Overlay>
-         <LayersControl.Overlay checked name="Input Location">
+          </Overlay>
+         <Overlay checked name="Input Location">
             <LayerGroup>
             {breweryStore && breweryStore.searchLocation &&  <LocationMarker markerPosition={{lat: breweryStore.searchLocation.lat, lng: breweryStore.searchLocation.lon}}/>}
             </LayerGroup>
-          </LayersControl.Overlay>
+          </Overlay>
         </LayersControl>
       </MapContainer>}
       </>
