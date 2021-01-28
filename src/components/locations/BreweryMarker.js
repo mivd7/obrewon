@@ -5,7 +5,9 @@ import { beerIcon, animatedBeerIcon } from '../../lib/icons';
 function BreweryMarker({ markerPosition, brewery, closest }) {
   const markerRef = useRef(null);
   const [position, setPosition] = useState(null);
-
+  function changeIcon() {
+    
+  }
   useEffect(() => {
     setPosition([markerPosition.lat, markerPosition.lng])
   }, [markerPosition])
@@ -14,7 +16,15 @@ function BreweryMarker({ markerPosition, brewery, closest }) {
       <Marker 
         ref={markerRef} 
         position={position} 
-        icon={closest ? animatedBeerIcon : beerIcon}>
+        icon={closest ? animatedBeerIcon : beerIcon}
+        eventHandlers={{
+          click: (e) => {
+            console.log('marker clicked', e);
+            // if(closest) {
+              markerRef.current.setIcon(beerIcon)
+            // }
+          },
+        }}>
         <Popup>
           {brewery.name}
         </Popup>
