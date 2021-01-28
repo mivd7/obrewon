@@ -15,3 +15,23 @@ export function getDistanceInKm(lat1,lon1,lat2,lon2) {
 function deg2rad(deg) {
   return deg * (Math.PI/180)
 }
+
+export function getSearchMapBounds(searchLocationCoords, searchResultCoords) {
+  return {
+    northernmost: findNorthernmostPoint([searchLocationCoords, searchResultCoords]),
+    southernmost: findSouthernmostPoint([searchLocationCoords, searchResultCoords])
+  }
+}
+function findNorthernmostPoint(locationProperties) {
+  const result = locationProperties.reduce(function(prev, current) {
+    return (prev.lng < current.lng) ? prev : current
+  })
+  return result;
+}
+
+function findSouthernmostPoint(locationProperties) {
+  const result = locationProperties.reduce(function(prev, current) {
+    return (prev.lng > current.lng) ? prev : current
+  })
+  return result;
+}
