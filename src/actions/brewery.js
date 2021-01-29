@@ -24,7 +24,7 @@ export function setNotFoundError() {
   }
 }
 
-export const getPostcodeCoordinates = (request) => (dispatch) => {
+export const getInputLocation = (request) => (dispatch) => {
   return new Promise(async () => {
     await axios.get(`https://api.geoapify.com/v1/geocode/search?text=${request}&apiKey=4680392dcd4944afad13f1d18834846e`)
       .then(res => {

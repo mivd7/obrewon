@@ -1,19 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
 // import { useMapEvents } from 'react-leaflet';
 import { Marker, Popup } from 'react-leaflet';
-import { youAreHereIcon } from '../../lib/icons';
+import { homeIcon, youAreHereIcon } from '../../lib/icons';
 
-function LocationMarker({ markerPosition }) {
+function LocationMarker({ markerPosition, geolocation }) {
   const markerRef = useRef(null);
   const [position, setPosition] = useState(null);
 
   useEffect(() => {
     //watch position change of marker
-    setPosition([markerPosition.lat, markerPosition.lng])
+    if(markerPosition) {
+      setPosition([markerPosition.lat, markerPosition.lng])
+    }
   }, [markerPosition])
 
   return position === null ? null : (
-      <Marker ref={markerRef} position={position} icon={youAreHereIcon}>
+      <Marker ref={markerRef} position={position} icon={geolocation ? homeIcon : youAreHereIcon}>
         <Popup>
           You are here!
         </Popup>
