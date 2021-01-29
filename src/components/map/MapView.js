@@ -12,14 +12,16 @@ import { getMapBounds } from '../../lib/calculator';
 const { Overlay } = LayersControl;
 
 const MapView = ({breweries, userLocation}) => {
-  const [currentLocation] = useState({lat: 52.100833, lng: 5.646111});
   const [zoom] = useState(14);
-  const [mapBounds, setMapBounds] = useState(null);
+  const [mapBounds, setMapBounds] = useState([
+    [53.044676, 5.9428943],
+    [50.9819254, 4.4488786],
+  ]);
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [markerGroupRef, setMarkerGroupRef] = useState(null);
   const dispatch = useDispatch();
   const breweryStore = useSelector(state => state.brewery);
-  // const user = useSelector(state => state.user);
+  const user = useSelector(state => state.user);
 
   useEffect(() => {
     if(markerGroupRef) {
@@ -46,13 +48,10 @@ const MapView = ({breweries, userLocation}) => {
   }, [breweryStore]);
 
   return (<>
-      <MapContainer
-        center={currentLocation}
-        zoom={zoom}
-        scrollWheelZoom={true}>
+     <MapContainer bounds={mapBounds} scrollWheelZoom={true}>
         {showSearchResults ? 
           <ViewControl center={{lat: breweryStore.searchResult.locationProperties.lat, lng: breweryStore.searchResult.locationProperties.lng }} zoom={zoom} bounds={mapBounds}/> : 
-          <ViewControl center={currentLocation} zoom={zoom} initialBounds={mapBounds}/> }
+          <ViewControl zoom={zoom} /> }
         <LayersControl position="topright">
           <MapBackground/>
           <Overlay checked name="Search">
@@ -64,7 +63,7 @@ const MapView = ({breweries, userLocation}) => {
             <FeatureGroup ref={ref => setMarkerGroupRef(ref)}>
               {breweries && breweries.map(brewery => <Brewery key={breweries.indexOf(brewery)} brewery={brewery}/>)}
               {breweryStore && breweryStore.searchLocation &&  <LocationMarker markerPosition={{lat: breweryStore.searchLocation.lat, lng: breweryStore.searchLocation.lon}}/>}
-              {/* {user && !user.locationLoading && !user.locationError &&  <LocationMarker markerPosition={user.coords}/>} */}
+              {user &&  user.geolocation && !user.locationLoading && !user.locationError &&  <LocationMarker markerPosition={user.geolocation.coords}/>}
             </FeatureGroup>
           </Overlay>
         </LayersControl>
