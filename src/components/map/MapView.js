@@ -12,7 +12,6 @@ import { getMapBounds } from '../../lib/calculator';
 const { Overlay } = LayersControl;
 
 const MapView = ({breweries, userLocation}) => {
-  const [zoom] = useState(14);
   const [mapBounds, setMapBounds] = useState([
     [53.044676, 5.9428943],
     [50.9819254, 4.4488786],
@@ -50,8 +49,8 @@ const MapView = ({breweries, userLocation}) => {
   return (<>
      <MapContainer bounds={mapBounds} scrollWheelZoom={true}>
         {showSearchResults ? 
-          <ViewControl center={{lat: breweryStore.searchResult.locationProperties.lat, lng: breweryStore.searchResult.locationProperties.lng }} zoom={zoom} bounds={mapBounds}/> : 
-          <ViewControl zoom={zoom} /> }
+          <ViewControl center={{lat: breweryStore.searchResult.locationProperties.lat, lng: breweryStore.searchResult.locationProperties.lng }} zoom={14} bounds={mapBounds}/> : 
+          <ViewControl zoom={14} /> }
         <LayersControl position="topright">
           <MapBackground/>
           <Overlay checked name="Search">
@@ -63,7 +62,7 @@ const MapView = ({breweries, userLocation}) => {
             <FeatureGroup ref={ref => setMarkerGroupRef(ref)}>
               {breweries && breweries.map(brewery => <Brewery key={breweries.indexOf(brewery)} brewery={brewery}/>)}
               {breweryStore && breweryStore.searchLocation &&  <LocationMarker markerPosition={{lat: breweryStore.searchLocation.lat, lng: breweryStore.searchLocation.lon}}/>}
-              {user &&  user.geolocation && !user.locationLoading && !user.locationError &&  <LocationMarker markerPosition={user.geolocation.coords}/>}
+              {user &&  user.geolocation && !user.locationLoading && !user.locationError &&  <LocationMarker markerPosition={user.geolocation.coords} geolocation={user.geolocation}/>}
             </FeatureGroup>
           </Overlay>
         </LayersControl>

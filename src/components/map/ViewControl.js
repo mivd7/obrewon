@@ -27,7 +27,7 @@ export default function ViewControl({ zoom, bounds, initialBounds }) {
       dispatch(setUserLocation(geolocation));
     }
 
-    map.locate()
+    map.locate();
     map.on('locationfound', onLocationFound);
     map.on('locationerror', onLocationError);
   }, [map, dispatch, zoom]);
@@ -38,9 +38,7 @@ export default function ViewControl({ zoom, bounds, initialBounds }) {
     const northEast = new L.LatLng(bounds.northernmost.lat, bounds.northernmost.lng)
     const searchBounds = new L.LatLngBounds(southWest, northEast);
     map.flyToBounds(searchBounds);
-  } else if(initialBounds) {
-    //initial map view when user location not (yet) found;
-    map.fitBounds(initialBounds)
-  }
+  } 
+  
   return null;
 }
