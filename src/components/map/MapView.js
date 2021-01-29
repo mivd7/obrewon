@@ -11,14 +11,15 @@ import MapBackground from './MapBackground';
 import { getMapBounds } from '../../lib/calculator';
 const { Overlay } = LayersControl;
 
-const MapView = ({breweries}) => {
-  const [currentLocation ] = useState({lat: 52.100833, lng: 5.646111});
-  const [zoom] = useState(15);
+const MapView = ({breweries, userLocation}) => {
+  const [currentLocation] = useState({lat: 52.100833, lng: 5.646111});
+  const [zoom] = useState(14);
   const [mapBounds, setMapBounds] = useState(null);
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [markerGroupRef, setMarkerGroupRef] = useState(null);
   const dispatch = useDispatch();
   const breweryStore = useSelector(state => state.brewery);
+  // const user = useSelector(state => state.user);
 
   useEffect(() => {
     if(markerGroupRef) {
@@ -63,6 +64,7 @@ const MapView = ({breweries}) => {
             <FeatureGroup ref={ref => setMarkerGroupRef(ref)}>
               {breweries && breweries.map(brewery => <Brewery key={breweries.indexOf(brewery)} brewery={brewery}/>)}
               {breweryStore && breweryStore.searchLocation &&  <LocationMarker markerPosition={{lat: breweryStore.searchLocation.lat, lng: breweryStore.searchLocation.lon}}/>}
+              {/* {user && !user.locationLoading && !user.locationError &&  <LocationMarker markerPosition={user.coords}/>} */}
             </FeatureGroup>
           </Overlay>
         </LayersControl>

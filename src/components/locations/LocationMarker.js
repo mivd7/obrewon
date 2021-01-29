@@ -9,7 +9,9 @@ function LocationMarker({ markerPosition }) {
 
   useEffect(() => {
     //watch position change of marker
-    setPosition([markerPosition.lat, markerPosition.lng])
+    if(markerPosition) {
+      setPosition([markerPosition.lat, markerPosition.lng])
+    }
   }, [markerPosition])
 
   return position === null ? null : (

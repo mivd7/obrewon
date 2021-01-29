@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { getPostcodeCoordinates } from "../../actions/brewery";
+import { getInputLocation } from "../../actions/brewery";
 
 const Form = styled.form`
   position: relative;
@@ -62,7 +62,7 @@ function SearchBar() {
     e.preventDefault();
     setInput("");
     setBarOpened(false);
-    dispatch(getPostcodeCoordinates(input))
+    dispatch(getInputLocation(input))
   };
   
   return (<>
