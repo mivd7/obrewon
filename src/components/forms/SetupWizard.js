@@ -1,12 +1,24 @@
 import React, { useRef, useState } from 'react';
 import { useSpring, animated } from 'react-spring';
 import styled from 'styled-components';
-// import { NavigateNext } from '@styled-icons/material/NavigateNext'
-// import { NavigateBefore } from '@styled-icons/material/NavigateBefore';
-// import {Zap} from '@styled-icons/octicons';
+import { NavigateNext } from '@styled-icons/material/NavigateNext'
+import { NavigateBefore } from '@styled-icons/material/NavigateBefore';
+
 import close from '../../assets/close.svg';
-import { Container, NavButtonContainer } from "../ui";
 import SetupWizardStep from "./SetupWizardStep";
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const NavButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
 
 const Background = styled.div`
   width: 100%;
@@ -61,21 +73,36 @@ const CloseModalButton = styled.img`
   height: 32px;
   padding: 0;
 `;
+//#DCDAD1
+const NextButton = styled(NavigateNext)`
+  color: ${props => props.color}
+  width: 5rem;
+  height: 5rem;
+  cursor: pointer;
+`
 
-
-
+const BackButton = styled(NavigateBefore)`
+  color: ${props => props.color}
+  width: 5rem;
+  height: 5rem;
+  cursor: pointer;
+`
 
 const SetupWizard = ({ showModal }) => {
   const modalRef = useRef();
   const [show, setShow] = useState(showModal)
   const [stepIndex, setStepIndex] = useState(0);
-  const steps = ['welcome', 'transportation', 'location'];
+  const steps = ['welcome', 'location', 'transportation'];
   const handleNext = () => {
-    setStepIndex(stepIndex + 1);
+    if(steps[stepIndex + 1]) {
+      setStepIndex(stepIndex + 1);
+    }
   }
 
   const handleBack = () => {
-    setStepIndex(stepIndex - 1);
+    if(stepIndex > 0) {
+      setStepIndex(stepIndex - 1);
+    }
   }
 
   const animation = useSpring({
@@ -96,8 +123,9 @@ const SetupWizard = ({ showModal }) => {
               <Container>
                 <SetupWizardStep step={steps[stepIndex]}/>
                 <NavButtonContainer>
-                  <button>Back</button>
-                  <button>Next</button>
+                  <BackButton onClick={handleBack} color={stepIndex === 0 ? "#DCDAD1" : "#3fb984"}/>
+                  <p>Step {stepIndex + 1} of {steps.length}</p>
+                  <NextButton onClick={handleNext} color={stepIndex === steps.length ? "#DCDAD1" : "#3fb984"}/>
                 </NavButtonContainer>
               </Container>
                 {/* <SetupWizardContent step={steps[stepIndex]} onNext={handleNext} onPrevious={handlePrev}/> */}

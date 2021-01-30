@@ -55,7 +55,7 @@ const MapView = ({ breweries }) => {
           <ViewControl center={{lat: breweryStore.searchResult.locationProperties.lat, lng: breweryStore.searchResult.locationProperties.lng }} zoom={14} bounds={mapBounds}/> : 
           <ViewControl zoom={14} /> }
         <LayersControl position="topright">
-          {/* <MapBackground/> */}
+          <MapBackground/>
           <Overlay checked name="Search">
             <LayerGroup>
                 <SearchBar/>
