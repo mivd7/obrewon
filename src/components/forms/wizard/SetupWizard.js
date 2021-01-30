@@ -5,9 +5,13 @@ import styled from 'styled-components';
 import { NavigateNext } from '@styled-icons/material/NavigateNext'
 import { NavigateBefore } from '@styled-icons/material/NavigateBefore';
 
-import close from '../../assets/close.svg';
-import SetupWizardStep from "./SetupWizardStep";
-import { getAddressByLocation } from '../../actions/user';
+import close from '../../../assets/close.svg';
+import toast from '../../../assets/toast.svg';
+import {ToastImg} from './SetupWizard.style'
+import { getAddressByLocation } from '../../../actions/user';
+import SetupWizardStep from './SetupWizardStep';
+import LocationStep from './LocationStep';
+import RouteStep from './RouteStep';
 
 const WizardStepContainer = styled.div`
   display: flex;
@@ -86,7 +90,7 @@ const BackButton = styled(NavigateBefore)`
 const SetupWizard = ({ showModal }) => {
   const [show, setShow] = useState(showModal)
   const [stepIndex, setStepIndex] = useState(0);
-  const steps = ['welcome', 'location', 'transportation'];
+  const steps = ['welcome', 'location', 'route'];
   const user = useSelector(state => state.user);
   const dispatch = useDispatch();
   
@@ -124,7 +128,7 @@ const SetupWizard = ({ showModal }) => {
             <ModalWrapper showModal={showModal}>
               <ModalContent>
               <WizardStepContainer>
-                <SetupWizardStep step={steps[stepIndex]} user={user} handleNext={handleNext}/>
+              <SetupWizardStep step={steps[stepIndex]} user={user} handleNext={handleNext}/>
                 <NavButtonContainer>
                   <BackButton onClick={handleBack} color={stepIndex === 0 ? "#DCDAD1" : "#3fb984"}/>
                   <p>Step {stepIndex + 1} of {steps.length}</p>

@@ -1,4 +1,4 @@
-import { BREWERIES_SET, INPUT_LOCATION_SET, INPUT_LOCATION_NOT_FOUND } from '../actions/location';
+import { BREWERIES_SET, INPUT_LOCATION_SET, INPUT_LOCATION_NOT_FOUND, ROUTE_SET } from '../actions/location';
 import {getDistanceInKm} from '../lib/calculator';
 
 export default function (state = {}, action = {}) {
@@ -16,7 +16,10 @@ export default function (state = {}, action = {}) {
         return state;
       }
     case INPUT_LOCATION_NOT_FOUND:
-      return {...state, searchError: 'Input location not found' }
+      return {...state, searchError: 'Input location not found'}
+    case ROUTE_SET:
+      console.log('ROUTE_SET')
+      return {...state, route: action.payload}
     default:
       return state;
   }

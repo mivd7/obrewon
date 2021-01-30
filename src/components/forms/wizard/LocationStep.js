@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { getLocationByAddress } from "../../actions/location";
+import { getLocationByAddress } from "../../../actions/location";
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -93,12 +93,15 @@ function LocationStep({user, onLocationConfirmed}) {
 
   return(<> 
     <h1>Where you at?</h1>
-    {user && user.locationLoading && <p>Hold on to your hat O'Brewon is grabbing your location</p>}
+    {user && user.locationLoading && <>
+      <p>Hold on! O'Brewon is trying to find you on the map...</p>
+      <img src="https://media.giphy.com/media/2kSfEOhJJApaYXsRJ7/giphy.gif" alt="glass filling" style={{maxWidth: '50%', margin: '10px'}}/>
+    </>}
     {user && user.address && <>
       <h2>According to O'Brewon your location is:</h2>
       <p>{user.address.street}, {user.address.postcode}</p>
       <p>{user.address.city}, {user.address.country}</p>
-      {!addressIncorrect ? 
+      {!addressIncorrect && 
         <>
           <h2>Is this correct?</h2>
           <ButtonContainer>
@@ -115,7 +118,8 @@ function LocationStep({user, onLocationConfirmed}) {
               No
             </ConfirmButton>
           </ButtonContainer>
-        </> : <>
+        </>}  
+      {addressIncorrect && <>
           <h2>What is your address then?</h2>
           <Form onSubmit={submitCorrectedAddress}>
             <Input

@@ -1,15 +1,8 @@
 // import React, { useState } from "react";
-import styled from 'styled-components';
-import toast from '../../assets/toast.svg';
+import toast from '../../../assets/toast.svg';
 import LocationStep from './LocationStep';
-
-const ToastImg = styled.img`
-  width: 25%;
-  height: 25%;
-  border-radius: 10px 0 0 10px;
-  margin: 10px 0;
-`;
-
+import RouteStep from './RouteStep';
+import { ToastImg } from './SetupWizard.style';
 
 function WelcomeStep() {
   return(<> 
@@ -23,10 +16,7 @@ export const SetupWizardStep = ({step, user, handleNext}) => {
   return (<>
     {step === 'welcome' && <WelcomeStep/>}
     {step === 'location' && <LocationStep user={user} onLocationConfirmed={handleNext}/>}
-    {step === 'transportation' && <>
-      <iframe title="We're the brews!" width="560" height="315" src="https://www.youtube.com/embed/K1ktUkwsoQM" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
-      <p>Here be details of the closest brewery and calculate route based on transportation method</p>
-    </>}
+    {step === 'route' && <RouteStep user={user}/>}
   </>);
 }
 

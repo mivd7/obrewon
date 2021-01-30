@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { FeatureGroup, LayerGroup, LayersControl, MapContainer } from 'react-leaflet'
+import { FeatureGroup, LayerGroup, LayersControl, MapContainer, GeoJSON } from 'react-leaflet'
 import { useDispatch, useSelector } from 'react-redux';
 
 import ViewControl from './ViewControl';
 import MapBackground from './MapBackground';
 import Help from './Help';
 import SearchBar from '../forms/SearchBar';
-import SetupWizard from '../forms/SetupWizard';
+import SetupWizard from '../forms/wizard/SetupWizard';
 import Brewery from '../locations/Brewery';
 import LocationMarker from '../locations/LocationMarker';
 import {setBreweries} from '../../actions/location';
@@ -32,7 +32,9 @@ const MapView = ({ breweries }) => {
   }, [markerGroupRef])
 
   useEffect(() => {
-    dispatch(setBreweries(breweries))
+    if(!locator.breweries) {
+      dispatch(setBreweries(breweries))
+    }
   }, [dispatch, breweries]);
 
   useEffect(() => {
@@ -72,9 +74,9 @@ const MapView = ({ breweries }) => {
           <Overlay checked name="Markers" >
             <FeatureGroup ref={ref => setMarkerGroupRef(ref)}>
               {breweries && breweries.map(brewery => <Brewery key={breweries.indexOf(brewery)} brewery={brewery}/>)}
-              {locator && locator.searchLocation &&  <LocationMarker markerPosition={{lat: locator.searchLocation.lat, lng: locator.searchLocation.lon}}/>}
               {user &&  user.geolocation && !user.locationLoading && <LocationMarker markerPosition={user.geolocation.coords} geolocation={user.geolocation}/>}
             </FeatureGroup>
+            {locator.route && <GeoJSON data={locator.route}/>}
           </Overlay>
         </LayersControl>
       </MapContainer>
