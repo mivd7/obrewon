@@ -9,9 +9,12 @@ import LocationMarker from '../locations/LocationMarker';
 import {setBreweries} from '../../actions/brewery';
 import MapBackground from './MapBackground';
 import { getMapBounds } from '../../lib/calculator';
+import ControlSample from './ControlSample';
+import Help from './Help';
+
 const { Overlay } = LayersControl;
 
-const MapView = ({breweries, userLocation}) => {
+const MapView = ({ breweries }) => {
   const [mapBounds, setMapBounds] = useState([
     [53.044676, 5.9428943],
     [50.9819254, 4.4488786],
@@ -58,14 +61,20 @@ const MapView = ({breweries, userLocation}) => {
                 <SearchBar/>
             </LayerGroup>
           </Overlay>
+          {/* <Overlay checked name="Tools">
+            <LayerGroup>
+                <ControlSample position="topright"/>
+            </LayerGroup>
+          </Overlay> */}
           <Overlay checked name="Markers" >
             <FeatureGroup ref={ref => setMarkerGroupRef(ref)}>
               {breweries && breweries.map(brewery => <Brewery key={breweries.indexOf(brewery)} brewery={brewery}/>)}
               {breweryStore && breweryStore.searchLocation &&  <LocationMarker markerPosition={{lat: breweryStore.searchLocation.lat, lng: breweryStore.searchLocation.lon}}/>}
-              {user &&  user.geolocation && !user.locationLoading && !user.locationError &&  <LocationMarker markerPosition={user.geolocation.coords} geolocation={user.geolocation}/>}
+              {user &&  user.geolocation && !user.locationLoading && <LocationMarker markerPosition={user.geolocation.coords} geolocation={user.geolocation}/>}
             </FeatureGroup>
           </Overlay>
         </LayersControl>
+        <Help/>
       </MapContainer>
       </>
     );

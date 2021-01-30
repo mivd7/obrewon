@@ -24,3 +24,13 @@
     top: -20px;
   }
 }
+
+.help-tool {
+  background-image: none;
+  padding: 6px;
+}
+
+.leaflet-bottom .help-control {
+  max-height: 44px;
+  cursor: pointer;
+}
