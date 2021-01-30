@@ -1,4 +1,4 @@
-import { BREWERIES_SET, INPUT_LOCATION_SET, INPUT_LOCATION_NOT_FOUND } from '../actions/brewery';
+import { BREWERIES_SET, INPUT_LOCATION_SET, INPUT_LOCATION_NOT_FOUND } from '../actions/location';
 import {getDistanceInKm} from '../lib/calculator';
 
 export default function (state = {}, action = {}) {

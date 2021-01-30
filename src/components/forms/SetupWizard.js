@@ -7,7 +7,7 @@ import { NavigateBefore } from '@styled-icons/material/NavigateBefore';
 
 import close from '../../assets/close.svg';
 import SetupWizardStep from "./SetupWizardStep";
-import { getAddressByLocation } from '../../actions/brewery';
+import { getAddressByLocation } from '../../actions/user';
 
 const WizardStepContainer = styled.div`
   display: flex;
@@ -53,15 +53,6 @@ const ModalContent = styled.div`
   align-items: center;
   line-height: 1.2;
   color: #141414;
-  button {
-    padding: 10px 24px;
-    background: transparent;
-    color: #3FB984;
-    border: none;
-    margin: 0 10px;
-    font-weight: bold;
-    font-size: 16px;
-  }
   p {
     font-size: 20px;
     margin: 0;
@@ -77,7 +68,7 @@ const CloseModalButton = styled.img`
   height: 32px;
   padding: 0;
 `;
-//#DCDAD1
+
 const NextButton = styled(NavigateNext)`
   color: ${props => props.color}
   width: 5rem;
@@ -98,10 +89,9 @@ const SetupWizard = ({ showModal }) => {
   const steps = ['welcome', 'location', 'transportation'];
   const user = useSelector(state => state.user);
   const dispatch = useDispatch();
-
+  
   useEffect(() => {
-    if(user.geolocation) {
-      console.log('user has location');
+    if(user.geolocation && !user.address) {
       dispatch(getAddressByLocation(user.geolocation.coords))
     }
   }, [user, dispatch]);
@@ -134,7 +124,7 @@ const SetupWizard = ({ showModal }) => {
             <ModalWrapper showModal={showModal}>
               <ModalContent>
               <WizardStepContainer>
-                <SetupWizardStep step={steps[stepIndex]}/>
+                <SetupWizardStep step={steps[stepIndex]} user={user} handleNext={handleNext}/>
                 <NavButtonContainer>
                   <BackButton onClick={handleBack} color={stepIndex === 0 ? "#DCDAD1" : "#3fb984"}/>
                   <p>Step {stepIndex + 1} of {steps.length}</p>
@@ -146,8 +136,7 @@ const SetupWizard = ({ showModal }) => {
             <CloseModalButton
                 aria-label='Close modal'
                 src={close}
-                onClick={() => setShow(false)}
-              />
+                onClick={() => setShow(false)} />
           </animated.div>
         </Background>}
     </>

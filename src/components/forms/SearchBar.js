@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { getLocationByAddress } from "../../actions/brewery";
+import { getLocationByAddress } from "../../actions/location";
 
 const Form = styled.form`
   position: relative;
