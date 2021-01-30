@@ -26,11 +26,12 @@
 }
 
 .help-tool {
-  background-image: none;
+  background-color: #F4F4F4;
   padding: 6px;
-}
-
-.leaflet-bottom .help-control {
-  max-height: 44px;
   cursor: pointer;
 }
+
+/* .leaflet-bottom .help-control {
+  max-height: 44px;
+  cursor: pointer;
+} */

@@ -3,14 +3,14 @@ import { FeatureGroup, LayerGroup, LayersControl, MapContainer } from 'react-lea
 import { useDispatch, useSelector } from 'react-redux';
 
 import ViewControl from './ViewControl';
-import SearchBar from '../search/SearchBar';
+import MapBackground from './MapBackground';
+import Help from './Help';
+import SearchBar from '../forms/SearchBar';
+import SetupWizard from '../forms/SetupWizard';
 import Brewery from '../locations/Brewery';
 import LocationMarker from '../locations/LocationMarker';
 import {setBreweries} from '../../actions/brewery';
-import MapBackground from './MapBackground';
 import { getMapBounds } from '../../lib/calculator';
-import ControlSample from './ControlSample';
-import Help from './Help';
 
 const { Overlay } = LayersControl;
 
@@ -55,17 +55,20 @@ const MapView = ({ breweries }) => {
           <ViewControl center={{lat: breweryStore.searchResult.locationProperties.lat, lng: breweryStore.searchResult.locationProperties.lng }} zoom={14} bounds={mapBounds}/> : 
           <ViewControl zoom={14} /> }
         <LayersControl position="topright">
-          <MapBackground/>
+          {/* <MapBackground/> */}
           <Overlay checked name="Search">
             <LayerGroup>
                 <SearchBar/>
             </LayerGroup>
           </Overlay>
-          {/* <Overlay checked name="Tools">
+          <Overlay checked name="Tools">
             <LayerGroup>
-                <ControlSample position="topright"/>
+              <Help/>
             </LayerGroup>
-          </Overlay> */}
+            <LayerGroup>
+              <SetupWizard showModal={true} />
+            </LayerGroup>
+          </Overlay>
           <Overlay checked name="Markers" >
             <FeatureGroup ref={ref => setMarkerGroupRef(ref)}>
               {breweries && breweries.map(brewery => <Brewery key={breweries.indexOf(brewery)} brewery={brewery}/>)}
@@ -74,7 +77,6 @@ const MapView = ({ breweries }) => {
             </FeatureGroup>
           </Overlay>
         </LayersControl>
-        <Help/>
       </MapContainer>
       </>
     );
