@@ -12,8 +12,16 @@ const ToastImg = styled.img`
 export function SetupWizardStep({step, stepIndex}) {
   function WelcomeStep() {
     return(<> 
-      <h1>Welcome to O'brewon</h1>
-      <p>The app for thirsty people and beer lovers, that finds the closest brewery near you</p>
+      <h1>Welcome to O'Brewon</h1>
+      <p>The app for thirsty people and beer lovers, which finds the closest brewery near you. Let's get started!</p>
+      <ToastImg src={toast} alt="biertje?"/>
+    </>)
+  }
+
+  function WelcomeStep() {
+    return(<> 
+      <h1>Welcome to O'Brewon</h1>
+      <p>The app for thirsty people and beer lovers, which finds the closest brewery near you. Let's get started!</p>
       <ToastImg src={toast} alt="biertje?"/>
     </>)
   }

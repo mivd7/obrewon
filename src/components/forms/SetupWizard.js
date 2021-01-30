@@ -1,4 +1,5 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useSpring, animated } from 'react-spring';
 import styled from 'styled-components';
 import { NavigateNext } from '@styled-icons/material/NavigateNext'
@@ -6,12 +7,15 @@ import { NavigateBefore } from '@styled-icons/material/NavigateBefore';
 
 import close from '../../assets/close.svg';
 import SetupWizardStep from "./SetupWizardStep";
+import { getAddressByLocation } from '../../actions/brewery';
 
-const Container = styled.div`
+const WizardStepContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 2rem;
+  text-align: center;
 `;
 
 const NavButtonContainer = styled.div`
@@ -47,7 +51,7 @@ const ModalContent = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  line-height: 1.8;
+  line-height: 1.2;
   color: #141414;
   button {
     padding: 10px 24px;
@@ -89,10 +93,19 @@ const BackButton = styled(NavigateBefore)`
 `
 
 const SetupWizard = ({ showModal }) => {
-  const modalRef = useRef();
   const [show, setShow] = useState(showModal)
   const [stepIndex, setStepIndex] = useState(0);
   const steps = ['welcome', 'location', 'transportation'];
+  const user = useSelector(state => state.user);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if(user.geolocation) {
+      console.log('user has location');
+      dispatch(getAddressByLocation(user.geolocation.coords))
+    }
+  }, [user, dispatch]);
+
   const handleNext = () => {
     if(steps[stepIndex + 1]) {
       setStepIndex(stepIndex + 1);
@@ -116,19 +129,18 @@ const SetupWizard = ({ showModal }) => {
   return(
     <>
       {show && 
-        <Background ref={modalRef}>
+        <Background>
           <animated.div style={animation}>
             <ModalWrapper showModal={showModal}>
               <ModalContent>
-              <Container>
+              <WizardStepContainer>
                 <SetupWizardStep step={steps[stepIndex]}/>
                 <NavButtonContainer>
                   <BackButton onClick={handleBack} color={stepIndex === 0 ? "#DCDAD1" : "#3fb984"}/>
                   <p>Step {stepIndex + 1} of {steps.length}</p>
                   <NextButton onClick={handleNext} color={stepIndex === steps.length ? "#DCDAD1" : "#3fb984"}/>
                 </NavButtonContainer>
-              </Container>
-                {/* <SetupWizardContent step={steps[stepIndex]} onNext={handleNext} onPrevious={handlePrev}/> */}
+              </WizardStepContainer>
               </ModalContent>
             </ModalWrapper>
             <CloseModalButton
