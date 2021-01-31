@@ -1,5 +1,5 @@
 // import React, { useState } from "react";
-import toast from '../../../assets/toast.svg';
+import toast from '../../assets/toast.svg';
 import LocationStep from './LocationStep';
 import RouteStep from './RouteStep';
 import { ToastImg, Box } from './SetupWizard.style';

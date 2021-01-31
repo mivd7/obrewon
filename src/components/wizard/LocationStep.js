@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { getLocationByAddress } from "../../../actions/location";
+import { getLocationByAddress } from "../../actions/location";
 import { Box, ConfirmButton, Form, Input, SearchButton } from "./SetupWizard.style";
 
 function LocationStep({user, onLocationConfirmed}) {
@@ -18,7 +18,7 @@ function LocationStep({user, onLocationConfirmed}) {
       if(confirmed) {
         dispatch(getLocationByAddress(user.address.formatted));
         setAddressIncorrect(false);
-        onLocationConfirmed()
+        onLocationConfirmed();
       } else {
         setAddressIncorrect(true);
       }

@@ -88,7 +88,7 @@ export const ModalWrapper = styled.div`
   line-height: 1.2;
   color: #141414;
   p {
-    font-size: 20px;
+    font-size: 16px;
     margin: 0;
   }
 `;
@@ -96,6 +96,8 @@ export const ModalWrapper = styled.div`
 export const GridElement = styled.div`
   display: grid;
   grid-auto-flow: ${props => props.gridAutoFlow};
+  grid-column-end: ${props => props.columnEnd};
+  grid-column-start: ${props => props.columnStart};
   align-items: ${props => props.align};
   justify-items: ${props => props.align};
 `;
@@ -103,6 +105,8 @@ export const GridElement = styled.div`
 export const Box = styled.div`
   color: black;
   height: auto;
+  margin: ${props => props.margin};
+  padding: 0 17px;
 `
 
 export const CloseModalButton = styled.img`

@@ -5,6 +5,7 @@ export const BREWERIES_SET = 'BREWERIES_SET';
 export const SEARCH_LOCATION_SET = 'SEARCH_LOCATION_SET';
 export const INPUT_LOCATION_NOT_FOUND = 'INPUT_LOCATION_NOT_FOUND';
 export const ROUTE_SET = 'ROUTE_SET';
+export const FILTER_OPEN_BREWERIES = 'FILTER_OPEN_BREWERIES';
 
 export function setBreweries(payload) {
   return {
@@ -39,7 +40,6 @@ export const getLocationByAddress = (params) => (dispatch) => {
       .then(res => {
         if (res.data.features.length > 0) {
           dispatch(setInputLocation(res.data.features[0].properties))
-          return res.data.features[0].properties
         } else {
           dispatch(setNotFoundError())
         }

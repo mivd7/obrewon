@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FeatureGroup, LayerGroup, LayersControl, MapContainer } from 'react-leaflet'
 import { useDispatch, useSelector } from 'react-redux';
 
 import ViewControl from './ViewControl';
 import MapBackground from './MapBackground';
 import Help from './Help';
-import SearchBar from '../forms/SearchBar';
-import SetupWizard from '../forms/wizard/SetupWizard';
+import SearchBar from '../search/SearchBar';
+import SetupWizard from '../wizard/SetupWizard';
 import Brewery from '../locations/Brewery';
 import LocationMarker from '../locations/LocationMarker';
 import { setBreweries } from '../../actions/location';
@@ -23,8 +23,8 @@ const MapView = ({ breweries }) => {
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [wizardCompleted, setWizardCompleted] = useState(false);
   const [disableMapInteractions, setDisableMapInteractions] = useState(false);
-  const [markerGroupRef, setMarkerGroupRef] = useState(null);
   const dispatch = useDispatch();
+  //location?
   const locator = useSelector(state => state.location);
 
   const toggleMapInteractions = (active) => {
@@ -32,13 +32,8 @@ const MapView = ({ breweries }) => {
   }
 
   useEffect(() => {
-    if(markerGroupRef) {
-      setMapBounds(markerGroupRef.getBounds())
-    }
-  }, [markerGroupRef])
-
-  useEffect(() => {
     if(!locator.breweries) {
+      //set breweries to store from breweries json, could be replaced by API call
       dispatch(setBreweries(breweries))
     }
   }, [dispatch, breweries, locator.breweries]);
@@ -78,7 +73,7 @@ const MapView = ({ breweries }) => {
             </LayerGroup>
           </Overlay>
           <Overlay checked name="Markers" >
-            <FeatureGroup ref={ref => setMarkerGroupRef(ref)}>
+            <FeatureGroup>
               {breweries && breweries.map(brewery => <Brewery key={breweries.indexOf(brewery)} brewery={brewery}/>)}
               {locator && locator.searchLocation && <LocationMarker markerPosition={{lat: locator.searchLocation.lat, lng: locator.searchLocation.lon}}/>}
             </FeatureGroup>

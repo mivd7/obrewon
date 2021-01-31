@@ -1,4 +1,19 @@
-export function getDistanceInKm(lat1,lon1,lat2,lon2) {
+const dayIndex = new Date().getDay();
+const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+export function sortBreweriesByDistance(breweries, payload) {
+  const result = breweries.filter(brewery => brewery.open.indexOf(days[dayIndex]) !== -1)
+                  .map(brewery => {
+                    return {
+                      ...brewery, 
+                      distance: getDistanceInKm(brewery.locationProperties.lat, brewery.locationProperties.lng, payload.lat, payload.lon)
+                    }})
+                  .sort((a,b) => a.distance - b.distance);
+  console.log('sort result', result);
+  return result;
+}
+
+function getDistanceInKm(lat1,lon1,lat2,lon2) {
   var R = 6371; // Radius of the earth in km
   var dLat = deg2rad(lat2-lat1);  // deg2rad below
   var dLon = deg2rad(lon2-lon1); 
@@ -15,6 +30,7 @@ export function getDistanceInKm(lat1,lon1,lat2,lon2) {
 function deg2rad(deg) {
   return deg * (Math.PI/180)
 }
+
 
 export function getMapBounds(coords) {
   return {
