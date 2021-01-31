@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { useMap } from "react-leaflet";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { getLocationByAddress } from "../../actions/location";
@@ -57,6 +58,7 @@ function SearchBar({ locator }) {
   const formRef = useRef();
   const inputFocus = useRef();
   const dispatch = useDispatch();
+  const map = useMap()
 
   const onFormSubmit = e => {
     e.preventDefault();
@@ -64,7 +66,26 @@ function SearchBar({ locator }) {
     setBarOpened(false);
     dispatch(getLocationByAddress(input))
   };
-  
+
+  useEffect(() => {
+    if(barOpened) {
+      map.dragging.disable();
+      map.touchZoom.disable();
+      map.doubleClickZoom.disable();
+      map.scrollWheelZoom.disable();
+      map.boxZoom.disable();
+      map.keyboard.disable();
+      if (map.tap) map.tap.disable();
+    } else {
+      map.dragging.enable();
+      map.touchZoom.enable();
+      map.doubleClickZoom.enable();
+      map.scrollWheelZoom.enable();
+      map.boxZoom.enable();
+      map.keyboard.enable();
+      if (map.tap) map.tap.enable();
+    }
+  }, [barOpened, map])
   return (<>
       <Form
         barOpened={barOpened}
@@ -74,12 +95,12 @@ function SearchBar({ locator }) {
             inputFocus.current.focus();
           }
         }}
-        onFocus={() => {
-          setBarOpened(true);
-          if(inputFocus.current) {
-            inputFocus.current.focus();
-          }
-        }}
+        // onFocus={() => {
+        //   setBarOpened(true);
+        //   if(inputFocus.current) {
+        //     inputFocus.current.focus();
+        //   }
+        // }}
         onBlur={() => {
           setBarOpened(false);
         }}
