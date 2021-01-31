@@ -16,7 +16,7 @@ const Form = styled.form`
   padding: 1rem;
   height: 1rem;
   border-radius: .5rem;
-  border: .1rem solid #F28E1C;
+  border: .1rem solid #141414;
   transition: width 300ms cubic-bezier(0.645, 0.045, 0.355, 1);
   z-index: 9999;
   margin-top: 1rem;
@@ -36,7 +36,7 @@ const Input = styled.input`
     outline: none;
   }
   &::placeholder {
-    color: #F28E1C;
+    color: #eeeee;
   }
 `;
 
@@ -47,7 +47,7 @@ const Button = styled.button`
   background-color: transparent;
   border: none;
   outline: none;
-  color: #F28E1C;
+  color: #141414;
   text-align: left;
   font-size: 14px;
 `;

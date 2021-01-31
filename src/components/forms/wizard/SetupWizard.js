@@ -7,7 +7,7 @@ import { getAddressByLocation } from '../../../actions/user';
 import SetupWizardStep from './SetupWizardStep';
 import { Background, ModalWrapper, CloseModalButton, NextButton, BackButton, Row, GridElement, Box} from './SetupWizard.style'
 
-const SetupWizard = ({ showModal }) => {
+const SetupWizard = ({ showModal, closeWizard }) => {
   const [show, setShow] = useState(showModal)
   const [stepIndex, setStepIndex] = useState(0);
   const steps = ['welcome', 'location', 'route'];
@@ -56,12 +56,10 @@ const SetupWizard = ({ showModal }) => {
               </Box>
             </GridElement>
             <GridElement gridAutoFlow="column" align="center">
-              <Box>
-                <SetupWizardStep step={steps[stepIndex]} user={user} handleNext={handleNext}/>
-              </Box>
-              <Box>
-                <SetupWizardStep step={steps[stepIndex]} user={user} handleNext={handleNext}/>
-              </Box>
+              <SetupWizardStep step={steps[stepIndex]} user={user} handleNext={handleNext} closeWizard={() => {
+                setShow(false)
+                closeWizard()
+              }}/>
             </GridElement>
             <GridElement gridAutoFlow="column" align="center">
               <Box>

@@ -9,7 +9,7 @@ import SearchBar from '../forms/SearchBar';
 import SetupWizard from '../forms/wizard/SetupWizard';
 import Brewery from '../locations/Brewery';
 import LocationMarker from '../locations/LocationMarker';
-import { getRoute, setBreweries } from '../../actions/location';
+import { setBreweries } from '../../actions/location';
 import { getMapBounds } from '../../lib/calculator';
 import Route from './Route';
 
@@ -21,6 +21,7 @@ const MapView = ({ breweries }) => {
     [50.9819254, 4.4488786],
   ]);
   const [showSearchResults, setShowSearchResults] = useState(false);
+  const [wizardCompleted, setWizardCompleted] = useState(false);
   const [disableMapInteractions, setDisableMapInteractions] = useState(false);
   const [markerGroupRef, setMarkerGroupRef] = useState(null);
   const dispatch = useDispatch();
@@ -73,7 +74,7 @@ const MapView = ({ breweries }) => {
               <Help/>
             </LayerGroup>
             <LayerGroup>
-              <SetupWizard showModal={true} />
+              <SetupWizard showModal={true} closeWizard={() => setWizardCompleted(true)}/>
             </LayerGroup>
           </Overlay>
           <Overlay checked name="Markers" >
@@ -81,7 +82,7 @@ const MapView = ({ breweries }) => {
               {breweries && breweries.map(brewery => <Brewery key={breweries.indexOf(brewery)} brewery={brewery}/>)}
               {locator && locator.searchLocation && <LocationMarker markerPosition={{lat: locator.searchLocation.lat, lng: locator.searchLocation.lon}}/>}
             </FeatureGroup>
-            <Route/>              
+            {wizardCompleted && <Route/>}              
           </Overlay>
         </LayersControl>
       </MapContainer>

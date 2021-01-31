@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Box, ConfirmButton } from './SetupWizard.style';
 
-function RouteStep({ user }) {
+function RouteStep({ user, onDone }) {
   //or cycling-regular
   const [travelMethod, setTravelMethod] = useState('driving-car');
   const locator = useSelector(state => state.location);
@@ -27,8 +28,20 @@ function RouteStep({ user }) {
   // }, [locator, dispatch, travelMethod]);
 
   return(<>
-    <img src="https://media.giphy.com/media/2kSfEOhJJApaYXsRJ7/giphy.gif" alt="glass filling" style={{maxWidth: '50%'}}/>
-    <p>Here be details of the closest brewery and calculate route based on transportation method</p>
+    <Box>
+      <img src="https://media.giphy.com/media/2kSfEOhJJApaYXsRJ7/giphy.gif" alt="glass filling" style={{maxWidth: '50%'}}/>
+      <p>Here be details of the closest brewery and calculate route based on transportation method</p>
+    </Box>
+    <Box>
+      <p>list of breweries and travel select option</p>
+      <ConfirmButton 
+        buttonColor={'transparent'}
+        buttonTextColor={'#3FB984'}
+        onClick={() => onDone(true)}>
+        Done
+      </ConfirmButton>
+    </Box>
+    
   </>)
 }
 

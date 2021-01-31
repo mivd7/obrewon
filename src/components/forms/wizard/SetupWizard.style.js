@@ -2,13 +2,6 @@ import styled from 'styled-components';
 import { NavigateNext } from '@styled-icons/material/NavigateNext'
 import { NavigateBefore } from '@styled-icons/material/NavigateBefore';
 
-export const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: row;
-`;
-
 export const ConfirmButton = styled.button`
   padding: 10px 24px;
   background: ${props => props.buttonColor};

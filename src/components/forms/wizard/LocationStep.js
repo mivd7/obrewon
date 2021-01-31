@@ -2,69 +2,7 @@ import { useState } from "react"
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { getLocationByAddress } from "../../../actions/location";
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: row;
-`;
-
-const ConfirmButton = styled.button`
-  padding: 10px 24px;
-  background: ${props => props.buttonColor};
-  color: ${props => props.buttonTextColor};
-  border: 1px solid #3FB984;
-  border-radius: .5rem;
-  margin: 5px 10px;
-  font-weight: bold;
-  font-size: 16px;
-  cursor: pointer;
-  &:focus {
-    background: ${props => props.buttonColor};
-    color: ${props => props.buttonTextColor};
-  }
-`;
-
-const SearchButton = styled.button`
-  padding: 10px 24px;
-  background: black;
-  color: white;
-  border: none;
-  font-weight: bold;
-  font-size: 16px;
-  cursor: pointer;
-`;
-
-const Form = styled.form`
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #F4F4F4;
-  width: 30rem;
-  padding: 1rem;
-  height: 1rem;
-  border-radius: .5rem;
-  border: .1rem solid black;
-  transition: width 300ms cubic-bezier(0.645, 0.045, 0.355, 1);
-`;
-
-const Input = styled.input`
-  font-size: 14px;
-  line-height: 1;
-  background-color: transparent;
-  width: 100%;
-  border: none;
-  color: black;
-  &:focus,
-  &:active {
-    outline: none;
-  }
-  &::placeholder {
-    color: grey;
-  }
-`;
+import { Box, ConfirmButton, Form, Input, SearchButton } from "./SetupWizard.style";
 
 function LocationStep({user, onLocationConfirmed}) {
   const [buttonColor, setButtonColor] = useState('transparent');
@@ -91,7 +29,7 @@ function LocationStep({user, onLocationConfirmed}) {
     onLocationConfirmed();
   }
 
-  return(<> 
+  return(<Box> 
     <h1>Where you at?</h1>
     {user && user.locationLoading && <>
       <p>Hold on! O'Brewon is trying to find you on the map...</p>
@@ -104,7 +42,6 @@ function LocationStep({user, onLocationConfirmed}) {
       {!addressIncorrect && 
         <>
           <h2>Is this correct?</h2>
-          <ButtonContainer>
             <ConfirmButton 
               buttonColor={buttonColor}
               buttonTextColor={buttonTextColor}
@@ -117,7 +54,6 @@ function LocationStep({user, onLocationConfirmed}) {
               onClick={() => onClick(false)}>
               No
             </ConfirmButton>
-          </ButtonContainer>
         </>}  
       {addressIncorrect && <>
           <h2>What is your address then?</h2>
@@ -135,7 +71,7 @@ function LocationStep({user, onLocationConfirmed}) {
           </Form>
         </>}
     </>}
-  </>)
+  </Box>)
 }
 
 export default LocationStep;
