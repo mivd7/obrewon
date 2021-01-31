@@ -23,7 +23,6 @@ export default function (state = {}, action = {}) {
     case INPUT_LOCATION_NOT_FOUND:
       return {...state, searchError: 'Input location not found'}
     case ROUTE_SET:
-      console.log('ROUTE_SET')
       return {...state, route: action.payload}
     default:
       return state;
