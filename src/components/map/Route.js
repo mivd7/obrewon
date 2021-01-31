@@ -12,7 +12,7 @@ const Route = () => {
   const locator = useSelector(state => state.location);
 
   useEffect(() => {
-    //reset route layer on every render route
+    //reset route geojson layer on every render route
     if(!locator.route) {
       map.removeLayer(routeLayerRef.current);
     } else {
@@ -39,7 +39,7 @@ const Route = () => {
     } 
   }, [locator, dispatch])
 
-  return (<LayerGroup ref={routeLayerRef}>
+  return (<LayerGroup ref={routeLayerRef} name="route">
    {locator && locator.route && <GeoJSON data={locator.route}/>}
     </LayerGroup>
   )

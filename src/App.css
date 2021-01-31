@@ -35,3 +35,33 @@
   max-height: 44px;
   cursor: pointer;
 } */
+
+section {
+  height: 200px;
+  width: 200px;
+  border: 1px solid #2d2d2d;
+  margin-bottom: 12px;
+}
+
+.box {
+  color: #fff;
+  background: #2d2d2d;
+  padding: 12px;
+}
+
+/* centering with CSS Grid */
+.column-center {
+  display: grid;
+  justify-content: center;
+  gap: 4px;
+  align-content: center;
+  grid-auto-flow: column;
+}
+
+.item-center {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 4px;
+  align-items: center;
+  justify-items: center;
+}

@@ -13,6 +13,7 @@ export default function (state = {}, action = {}) {
         }).sort((a,b) => a.distance - b.distance);
         return {
           ...state, 
+          breweries: breweriesByDistance,
           searchResult: breweriesByDistance[0], 
           searchLocation: action.payload,
           route: null

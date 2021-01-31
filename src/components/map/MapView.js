@@ -21,9 +21,14 @@ const MapView = ({ breweries }) => {
     [50.9819254, 4.4488786],
   ]);
   const [showSearchResults, setShowSearchResults] = useState(false);
+  const [disableMapInteractions, setDisableMapInteractions] = useState(false);
   const [markerGroupRef, setMarkerGroupRef] = useState(null);
   const dispatch = useDispatch();
   const locator = useSelector(state => state.location);
+
+  const toggleMapInteractions = (active) => {
+    setDisableMapInteractions(active)
+  }
 
   useEffect(() => {
     if(markerGroupRef) {
@@ -53,14 +58,14 @@ const MapView = ({ breweries }) => {
 
   return (<>
      <MapContainer bounds={mapBounds} scrollWheelZoom={true}>
-        {showSearchResults ? 
+        {showSearchResults && locator && locator.searchResult ?
           <ViewControl center={{lat: locator.searchResult.locationProperties.lat, lng: locator.searchResult.locationProperties.lng }} zoom={14} bounds={mapBounds}/> : 
           <ViewControl zoom={14} /> }
         <LayersControl position="topright">
           <MapBackground/>
           <Overlay checked name="Search">
             <LayerGroup>
-                <SearchBar locator={locator}/>
+                <SearchBar locator={locator} onSearchBarActive={toggleMapInteractions}/>
             </LayerGroup>
           </Overlay>
           <Overlay checked name="Tools">

@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import { NavigateNext } from '@styled-icons/material/NavigateNext'
+import { NavigateBefore } from '@styled-icons/material/NavigateBefore';
 
 export const ButtonContainer = styled.div`
   display: flex;
@@ -69,3 +71,64 @@ export const ToastImg = styled.img`
   border-radius: 10px 0 0 10px;
   margin: 10px 0;
 `;
+
+export const Background = styled.div`
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
+
+export const ModalWrapper = styled.div`
+  width: 800px;
+  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
+  background: #fff;
+  padding: .75rem;
+  text-align: center;
+  color: #000;
+  position: relative;
+  border-radius: 10px;
+  line-height: 1.2;
+  color: #141414;
+  p {
+    font-size: 20px;
+    margin: 0;
+  }
+`;
+
+export const GridElement = styled.div`
+  display: grid;
+  grid-auto-flow: ${props => props.gridAutoFlow};
+  align-items: ${props => props.align};
+  justify-items: ${props => props.align};
+`;
+
+export const Box = styled.div`
+  color: black;
+  height: auto;
+`
+
+export const CloseModalButton = styled.img`
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  padding-right: 10px;
+`;
+
+export const NextButton = styled(NavigateNext)`
+  color: ${props => props.color}
+  width: 5rem;
+  height: 5rem;
+  cursor: pointer;
+`
+
+export const BackButton = styled(NavigateBefore)`
+  color: ${props => props.color}
+  width: 5rem;
+  height: 5rem;
+  cursor: pointer;
+`
