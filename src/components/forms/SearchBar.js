@@ -9,22 +9,20 @@ const Form = styled.form`
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  background-color: #F4F4F4;
-  /* Change width of the form depending if the bar is opened or not */
+  background-color: #eeeeee;
   width: ${(props) => (props.barOpened ? "30rem" : "4rem")};
-  /* If bar opened, normal cursor on the whole form. If closed, show pointer on the whole form so user knows he can click to open it */
   cursor: ${(props) => (props.barOpened ? "auto" : "pointer")};
   padding: 1rem;
   height: 1rem;
   border-radius: .5rem;
-  border: .1rem solid black;
+  border: .1rem solid #F28E1C;
   transition: width 300ms cubic-bezier(0.645, 0.045, 0.355, 1);
   z-index: 9999;
   margin-top: 1rem;
 `;
 
 const Input = styled.input`
-  font-size: 14px;
+  font-size: 20px;
   line-height: 1;
   background-color: transparent;
   width: 100%;
@@ -37,7 +35,7 @@ const Input = styled.input`
     outline: none;
   }
   &::placeholder {
-    color: grey;
+    color: #F28E1C;
   }
 `;
 
@@ -48,10 +46,12 @@ const Button = styled.button`
   background-color: transparent;
   border: none;
   outline: none;
-  color: black;
+  color: #F28E1C;
+  text-align: left;
+  font-size: 14px;
 `;
 
-function SearchBar() {
+function SearchBar({ locator }) {
   const [input, setInput] = useState("");
   const [barOpened, setBarOpened] = useState(false);
   const formRef = useRef();

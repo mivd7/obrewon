@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { FeatureGroup, LayerGroup, LayersControl, MapContainer, GeoJSON } from 'react-leaflet'
+import React, { useEffect, useRef, useState } from 'react';
+import { FeatureGroup, LayerGroup, LayersControl, MapContainer } from 'react-leaflet'
 import { useDispatch, useSelector } from 'react-redux';
 
 import ViewControl from './ViewControl';
@@ -9,8 +9,9 @@ import SearchBar from '../forms/SearchBar';
 import SetupWizard from '../forms/wizard/SetupWizard';
 import Brewery from '../locations/Brewery';
 import LocationMarker from '../locations/LocationMarker';
-import {setBreweries} from '../../actions/location';
+import { getRoute, setBreweries } from '../../actions/location';
 import { getMapBounds } from '../../lib/calculator';
+import Route from './Route';
 
 const { Overlay } = LayersControl;
 
@@ -23,7 +24,6 @@ const MapView = ({ breweries }) => {
   const [markerGroupRef, setMarkerGroupRef] = useState(null);
   const dispatch = useDispatch();
   const locator = useSelector(state => state.location);
-  const user = useSelector(state => state.user);
 
   useEffect(() => {
     if(markerGroupRef) {
@@ -35,10 +35,10 @@ const MapView = ({ breweries }) => {
     if(!locator.breweries) {
       dispatch(setBreweries(breweries))
     }
-  }, [dispatch, breweries]);
+  }, [dispatch, breweries, locator.breweries]);
 
   useEffect(() => {
-    if(locator.searchResult) {
+    if(locator.searchResult && locator.searchLocation) {
       setShowSearchResults(true); 
       const bounds = getMapBounds([{
         lat: locator.searchLocation.lat,
@@ -60,7 +60,7 @@ const MapView = ({ breweries }) => {
           <MapBackground/>
           <Overlay checked name="Search">
             <LayerGroup>
-                <SearchBar/>
+                <SearchBar locator={locator}/>
             </LayerGroup>
           </Overlay>
           <Overlay checked name="Tools">
@@ -74,9 +74,9 @@ const MapView = ({ breweries }) => {
           <Overlay checked name="Markers" >
             <FeatureGroup ref={ref => setMarkerGroupRef(ref)}>
               {breweries && breweries.map(brewery => <Brewery key={breweries.indexOf(brewery)} brewery={brewery}/>)}
-              {user &&  user.geolocation && !user.locationLoading && <LocationMarker markerPosition={user.geolocation.coords} geolocation={user.geolocation}/>}
+              {locator && locator.searchLocation && <LocationMarker markerPosition={{lat: locator.searchLocation.lat, lng: locator.searchLocation.lon}}/>}
             </FeatureGroup>
-            {locator.route && <GeoJSON data={locator.route}/>}
+            <Route/>              
           </Overlay>
         </LayersControl>
       </MapContainer>

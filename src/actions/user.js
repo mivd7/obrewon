@@ -1,4 +1,5 @@
 import axios from "axios";
+import { setInputLocation } from "./location";
 
 export const USER_LOCATION_SET = 'USER_LOCATION_SET';
 export const USER_ADDRESS_SET = 'USER_ADDRESS_SET';
@@ -25,6 +26,7 @@ export const getAddressByLocation = ({lat, lng}) => (dispatch) => {
       .then(res => {
         if (res.data.features.length > 0) {
           dispatch(setUserAddress(res.data.features[0].properties))
+          dispatch(setInputLocation(res.data.features[0].properties))
         } else {
           console.log('user address not found')
         }

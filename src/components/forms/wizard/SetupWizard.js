@@ -6,12 +6,8 @@ import { NavigateNext } from '@styled-icons/material/NavigateNext'
 import { NavigateBefore } from '@styled-icons/material/NavigateBefore';
 
 import close from '../../../assets/close.svg';
-import toast from '../../../assets/toast.svg';
-import {ToastImg} from './SetupWizard.style'
 import { getAddressByLocation } from '../../../actions/user';
 import SetupWizardStep from './SetupWizardStep';
-import LocationStep from './LocationStep';
-import RouteStep from './RouteStep';
 
 const WizardStepContainer = styled.div`
   display: flex;
@@ -31,7 +27,7 @@ const NavButtonContainer = styled.div`
 const Background = styled.div`
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.5);
   position: fixed;
   display: flex;
   justify-content: center;
