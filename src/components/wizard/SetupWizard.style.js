@@ -56,7 +56,6 @@ export const SearchButton = styled.button`
   color: ${props => props.buttonTextColor}
 `;
 
-
 export const ToastImg = styled.img`
   width: 25%;
   height: 25%;
@@ -97,6 +96,7 @@ export const ModalWrapper = styled.div`
 
 export const GridElement = styled.div`
   display: grid;
+  grid-template-columns: '1.5fr 1fr';
   grid-auto-flow: ${props => props.gridAutoFlow};
   grid-column-end: ${props => props.columnEnd};
   grid-column-start: ${props => props.columnStart};
@@ -108,7 +108,6 @@ export const Box = styled.div`
   color: black;
   height: auto;
   margin: ${props => props.margin};
-  padding: 0 17px;
 `
 
 export const CloseModalButton = styled.img`

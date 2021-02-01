@@ -66,8 +66,7 @@ function SearchBar({ locator }) {
   const onFormSubmit = e => {
     e.preventDefault();
     setInput("");
-    
-    
+    //needed to render correct geoJSON object with route
     dispatch({type: 'RESET_ROUTE'})
     dispatch(getLocationByAddress(input)).then((result) => {
       if(result) {

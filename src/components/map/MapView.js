@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { FeatureGroup, LayerGroup, LayersControl, MapContainer, GeoJSON } from 'react-leaflet'
+import { FeatureGroup, LayerGroup, LayersControl, MapContainer } from 'react-leaflet'
 import { useDispatch, useSelector } from 'react-redux';
 
 import ViewControl from './ViewControl';
 import MapBackground from './MapBackground';
-import Help from './Help';
+import RoutePlanner from './RoutePlanner';
 import SearchBar from '../search/SearchBar';
 import SetupWizard from '../wizard/SetupWizard';
 import Brewery from '../locations/Brewery';
@@ -22,15 +22,10 @@ const MapView = ({ breweries }) => {
   ]);
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [wizardCompleted, setWizardCompleted] = useState(false);
-  const [disableMapInteractions, setDisableMapInteractions] = useState(false);
+  const [disableMapInteractions, setDisableMapInteractions] = useState(false)
   const dispatch = useDispatch();
-  //location?
   const locator = useSelector(state => state.location);
   const geoJsonRef = useRef();
-
-  const toggleMapInteractions = (active) => {
-    setDisableMapInteractions(active)
-  }
 
   useEffect(() => {
     if(!locator.breweries) {
@@ -53,21 +48,29 @@ const MapView = ({ breweries }) => {
     }
   }, [locator]);
 
+  useEffect(() => {
+    if(!wizardCompleted) {
+      setDisableMapInteractions(true);
+    } else {
+      setDisableMapInteractions(false);
+    }
+  }, [wizardCompleted])
+  
   return (<>
      <MapContainer bounds={mapBounds} scrollWheelZoom={true}>
         {showSearchResults && locator && locator.searchResult ?
-          <ViewControl center={{lat: locator.searchResult.locationProperties.lat, lng: locator.searchResult.locationProperties.lng }} zoom={14} bounds={mapBounds}/> : 
+          <ViewControl center={{lat: locator.searchResult.locationProperties.lat, lng: locator.searchResult.locationProperties.lng }} zoom={14} bounds={mapBounds} disableMapInteractions={disableMapInteractions}/> : 
           <ViewControl zoom={14} /> }
         <LayersControl position="topright">
           <MapBackground/>
           <Overlay checked name="Search">
             <LayerGroup>
-                <SearchBar locator={locator} onSearchBarActive={toggleMapInteractions} geoJsonRef={geoJsonRef}/>
+                <SearchBar locator={locator} geoJsonRef={geoJsonRef} onActive={() => setDisableMapInteractions(true)} onClose={() => setDisableMapInteractions(false)}/>
             </LayerGroup>
           </Overlay>
           <Overlay checked name="Tools">
             <LayerGroup>
-              <Help/>
+              <RoutePlanner/>
             </LayerGroup>
             <LayerGroup>
               <SetupWizard showModal={true} closeWizard={() => setWizardCompleted(true)}/>

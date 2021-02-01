@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { DirectionsCar, DirectionsBike } from '@styled-icons/material';
+import { DirectionsCar, DirectionsBike, ToggleOff, ToggleOn } from '@styled-icons/material';
 
 import { GridElement } from './SetupWizard.style';
 import { getLocationByAddress, getRoute, updateTravelMethod } from '../../actions/location';
 
 const List = styled.ul`
+  position: relative;
   list-style: none;
   padding: 0px 10px;
   background-color: #fff;
@@ -22,9 +23,9 @@ const List = styled.ul`
 const ListItem = styled.li`
   padding: 10px;
   border: 1px solid #d1d1d1;
-  background-color: #f28e1c;
+  background-color: ${props => (props.isOpen ? "#f28e1c" : "#eee")};
   span {
-    color: #eeeeee
+    color: ${props => (props.isOpen ? "#eee" : "#141414")}
   }
 `;
 
@@ -44,6 +45,7 @@ const Form = styled.form`
   text-align: left;
   h2 {
     color: #777;
+    gap: 0;
   }
   `;
 
@@ -63,6 +65,12 @@ const Label = styled.label`
   font-family: "Raleway", sans-serif;
   font-size: 12px;
 `;
+
+const SwitchContainer = styled.div`
+  position: absolute;
+  top: 5px;
+  right: 5px;
+`
 // active bg: #f28e1c
 // inactive bg: #eeeeee
 const TravelMethodButton = styled.button`
@@ -84,9 +92,19 @@ const BikeIcon = styled(DirectionsBike)`
   width: 2.5rem;
   height: 2.5rem;
   cursor: pointer;
-  align-self: right;
 `
-
+const ToggleOffIcon = styled(ToggleOff)`
+  color: #f28e1c;
+  width: 2.5rem;
+  height: 2.5rem;
+  cursor: pointer;
+`
+const ToggleOnIcon = styled(ToggleOn)`
+  color: #f28e1c;
+  width: 2.5rem;
+  height: 2.5rem;
+  cursor: pointer;
+`
 const SubmitButton = styled.button`
   padding: 10px 24px;
   background: ${props => props.buttonColor};
@@ -101,20 +119,36 @@ const SubmitButton = styled.button`
 
 function RouteStep({ onDone }) {
   const locator = useSelector(state => state.location);
-  const [locationFound, setLocationFound] = useState(false);
+  const [showAllBreweries, setShowAllBreweries] = useState(false);
   const [currentLocation, setCurrentLocation] = useState('');
   const [travelMethod, setTravelMethod] = useState('driving-car');
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if(!locationFound && locator.searchLocation) {
+    if(locator.searchLocation) {
       //await searchLocation then set input value to zipcode
       setCurrentLocation(locator.searchLocation.postcode)
-      setLocationFound(false);
     }
-    if(locator.searchLocation && locator.searchResult && !locator.route) {
+    if(locator.travelMethod) {
+      setTravelMethod(locator.travelMethod);
+    }
+  }, [locator])
+
+  useEffect(() => {
+    if(showAllBreweries) {
+      dispatch({type: 'DISABLE_OPEN_FILTER'})
+    } else {
+      dispatch({type: 'ENABLE_OPEN_FILTER'})
+    }
+  }, [showAllBreweries, dispatch])
+
+  const handleSubmit = () => {
+    dispatch(updateTravelMethod(travelMethod)); 
+    dispatch({type: 'RESET_ROUTE'});
+    dispatch(getLocationByAddress(currentLocation)).then(() => {
+      console.log(travelMethod);
       const params = {
-        travelMethod: locator.travelMethod || 'driving-car',
+        travelMethod: travelMethod,
         start: {
           lat: locator.searchLocation.lat,
           lng: locator.searchLocation.lon
@@ -124,22 +158,25 @@ function RouteStep({ onDone }) {
           lng: locator.searchResult.locationProperties.lng
         }
       };
+      console.log('get with params', params)
       dispatch(getRoute(params));
-    }
-  }, [locator, dispatch, locationFound])
-
-  const handleSubmit = () => {
-    dispatch(updateTravelMethod(travelMethod)); 
-    dispatch(getLocationByAddress(currentLocation));
-    //dispatch(getRoute(params)
+    });
     onDone(true);
+  }
+
+  const toggleOpenFilter = () => {
+    setShowAllBreweries(!showAllBreweries)
+  }
+
+  const getRouteToBrewery = () => {
+    console.log('get route to clicked')
   }
 
   return(<>
     {locator.searchLocation && locator.searchResult && <>
     <GridElement gridAutoFlow="row" columnStart="0" columnEnd="0" align="center">
       <Form>
-          <h2>Your nearest open brewery is <span style={{color: '#f28e1c'}}>{locator.searchResult.name}</span> in <span style={{color: '#f28e1c'}}>{locator.searchResult.city}</span></h2>
+          <h2>Your nearest brewery is <span style={{color: '#f28e1c'}}>{locator.searchResult.name}</span> in <span style={{color: '#f28e1c'}}>{locator.searchResult.city}</span></h2>
           <Label>
             Change your location
             <Input 
@@ -155,7 +192,7 @@ function RouteStep({ onDone }) {
                 color={travelMethod === 'driving-car' ? '#eeeeee' : '#f28e1c'} 
                 onClick={e => {
                   e.preventDefault();
-                  setTravelMethod('driving-car')
+                  setTravelMethod('driving-car');
                 }}>
                 <CarIcon />
               </TravelMethodButton>
@@ -164,16 +201,14 @@ function RouteStep({ onDone }) {
                 color={travelMethod === 'cycling-regular' ? '#eeeeee' : '#f28e1c'} 
                 onClick={e => {
                   e.preventDefault();
-                  setTravelMethod('cycling-regular')
+                  setTravelMethod('cycling-regular');
                 }}>
                 <BikeIcon />
               </TravelMethodButton>
             </span>
-            <div style={{width: '100%'}}>
               {travelMethod === 'driving-car' ? 
                 <p style={{marginTop: 5, color: '#f28e1c'}}>Don't drink and drive!</p> : 
-                <p style={{marginTop: 5, color: '#f28e1c'}}>Wear a helmet on your return!</p>}
-            </div>
+                <p style={{marginTop: 5, color: '#f28e1c'}}>Wear a helmet on your way back!</p>}
           </Label>
           <SubmitButton
             type="submit" 
@@ -186,20 +221,28 @@ function RouteStep({ onDone }) {
     </GridElement>
     <GridElement gridAutoFlow="row" columnStart="0" columnEnd="0">
       <List>
-        {/* <Box> */}
-            <h2>Breweries Open Today</h2>
-            {locator.sortedBreweries && locator.sortedBreweries.map((brewery, index) => <ListItem key={brewery.name}>
+        <h2>{!showAllBreweries ? 'Closest Breweries Open Today' : 'Closest Breweries'}</h2>
+        <SwitchContainer>
+          <span onClick={() => toggleOpenFilter()}>
+            {showAllBreweries ? <ToggleOnIcon/> : <ToggleOffIcon/>}
+          </span>
+        </SwitchContainer>
+        {showAllBreweries && locator.breweries && locator.breweries.slice(0, 5).map((brewery, index) => 
+          <div key={brewery.name} onClick={getRouteToBrewery}>
+            <ListItem isOpen={locator.filteredBreweries.indexOf(brewery) !== -1}>
               <Title>{index + 1}. {brewery.name}</Title><br/>
               <span>{brewery.address}, {brewery.zipcode}, {brewery.city}</span><br/>
-              <span>Distance: {Math.round(brewery.distance)} km</span>
-            </ListItem>)}
-        {/* </Box> */}
+              {locator.filteredBreweries.indexOf(brewery) !== -1 ? <span>Distance: {Math.round(brewery.distance)} km</span> : <span style={{color: 'red'}}>Not opened today!</span>}
+              
+            </ListItem>
+          </div>)}
+        {!showAllBreweries && locator.filteredBreweries && locator.filteredBreweries.slice(0, 5).map((brewery, index) => <ListItem isOpen={locator.filteredBreweries.indexOf(brewery) !== -1} key={brewery.name}>
+          <Title>{index + 1}. {brewery.name}</Title><br/>
+          <span>{brewery.address}, {brewery.zipcode}, {brewery.city}</span><br/>
+          <span>Distance: {Math.round(brewery.distance)} km</span>
+        </ListItem>)}
       </List>
     </GridElement>
-    
-    {/* <Icon src={travelMethod === 'driving-car' ? carIcon : bikeIcon} />
-    <div>{travelMethod === 'driving-car' ? 'Car' : 'Bicycle'}</div> */}
-    
   </>
     }
   </>)

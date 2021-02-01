@@ -1,4 +1,4 @@
-import { BREWERIES_SET, SEARCH_LOCATION_SET, INPUT_LOCATION_NOT_FOUND, ROUTE_SET, TRAVEL_METHOD_UPDATED, RESET_ROUTE, INPUT_LOCATION_UPDATED } from '../actions/location';
+import { BREWERIES_SET, SEARCH_LOCATION_SET, INPUT_LOCATION_NOT_FOUND, ROUTE_SET, TRAVEL_METHOD_UPDATED, RESET_ROUTE, DISABLE_OPEN_FILTER, ENABLE_OPEN_FILTER } from '../actions/location';
 import {sortBreweriesByDistance} from '../lib/calculator';
 
 export default function (state = {}, action = {}) {
@@ -6,16 +6,26 @@ export default function (state = {}, action = {}) {
     case BREWERIES_SET:
       return {...state, breweries: action.payload};
     case SEARCH_LOCATION_SET:
-      delete state.searchLocation;
-      if(state.breweries && state.breweries.length > 0) { 
-        return {
-          ...state,
-          searchResult: sortBreweriesByDistance(state.breweries, action.payload)[0], 
-          searchLocation: action.payload,
-          sortedBreweries: sortBreweriesByDistance(state.breweries, action.payload),
-        };
-      } else {
-        return state;
+      const dayIndex = new Date().getDay();
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const sortedBreweries = sortBreweriesByDistance(state.breweries, action.payload);
+      const filteredOnOpen = sortedBreweries.filter(brewery => brewery.open.indexOf(days[dayIndex]) !== -1);
+      return {
+        ...state,
+        breweries: sortedBreweries,
+        searchResult: filteredOnOpen[0], 
+        searchLocation: action.payload,
+        filteredBreweries: filteredOnOpen,
+      };
+    case DISABLE_OPEN_FILTER:
+      return {
+        ...state,
+        searchResult: state.breweries[0]
+      }
+    case ENABLE_OPEN_FILTER:
+      return {
+        ...state,
+        searchResult: state.filteredBreweries[0]
       }
     case INPUT_LOCATION_NOT_FOUND:
       return {...state, searchError: 'Input location not found'}

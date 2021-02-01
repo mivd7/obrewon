@@ -1,11 +1,5 @@
 import axios from 'axios';
-import {
-  ORS_API_KEY,
-  GEOAPIFY_API_KEY
-} from '../constants';
-import {
-  setUserLocation
-} from './user';
+import { ORS_API_KEY, GEOAPIFY_API_KEY} from '../constants';
 
 export const BREWERIES_SET = 'BREWERIES_SET';
 export const SEARCH_LOCATION_SET = 'SEARCH_LOCATION_SET';
@@ -13,8 +7,8 @@ export const INPUT_LOCATION_NOT_FOUND = 'INPUT_LOCATION_NOT_FOUND';
 export const ROUTE_SET = 'ROUTE_SET';
 export const RESET_ROUTE = 'RESET_ROUTE';
 export const TRAVEL_METHOD_UPDATED = 'TRAVEL_METHOD_UPDATED';
-export const FILTER_OPEN_BREWERIES = 'FILTER_OPEN_BREWERIES';
-
+export const DISABLE_OPEN_FILTER = 'DISABLE_OPEN_FILTER';
+export const ENABLE_OPEN_FILTER = 'ENABLE_OPEN_FILTER';
 
 export function setBreweries(payload) {
   return {
