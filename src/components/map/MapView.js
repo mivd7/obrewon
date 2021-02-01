@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FeatureGroup, LayerGroup, LayersControl, MapContainer, GeoJSON } from 'react-leaflet'
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -26,6 +26,7 @@ const MapView = ({ breweries }) => {
   const dispatch = useDispatch();
   //location?
   const locator = useSelector(state => state.location);
+  const geoJsonRef = useRef();
 
   const toggleMapInteractions = (active) => {
     setDisableMapInteractions(active)
@@ -61,7 +62,7 @@ const MapView = ({ breweries }) => {
           <MapBackground/>
           <Overlay checked name="Search">
             <LayerGroup>
-                <SearchBar locator={locator} onSearchBarActive={toggleMapInteractions}/>
+                <SearchBar locator={locator} onSearchBarActive={toggleMapInteractions} geoJsonRef={geoJsonRef}/>
             </LayerGroup>
           </Overlay>
           <Overlay checked name="Tools">
@@ -78,10 +79,8 @@ const MapView = ({ breweries }) => {
               {locator && locator.searchLocation && <LocationMarker markerPosition={{lat: locator.searchLocation.lat, lng: locator.searchLocation.lon}}/>}
             </FeatureGroup>
             {/* {wizardCompleted && <Route/>}               */}
-            {wizardCompleted && locator && locator.route && 
-              <LayerGroup name="route">
-                <GeoJSON data={locator.route}/>
-              </LayerGroup>}
+            {wizardCompleted && 
+              <Route/>}
           </Overlay>
         </LayersControl>
       </MapContainer>

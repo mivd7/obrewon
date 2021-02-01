@@ -30,7 +30,8 @@ const Input = styled.input`
   transition: margin 300ms cubic-bezier(0.645, 0.045, 0.355, 1);
   border: none;
   background-color: inherit;
-  color: #141414
+  color: ${props => props.color};
+  outline: none;
   &:focus,
   &:active {
     outline: none;
@@ -55,7 +56,9 @@ const SearchButton = styled.button`
 function SearchBar({ locator }) {
   const [input, setInput] = useState("");
   const [barOpened, setBarOpened] = useState(false);
-  // const [searchQuerySubmitted, setSearchQuerySubmitted] = useState(false)
+  const [searchSuccess, setSearchSuccess] = useState(false)
+  const [searchError, setSearchError] = useState(false)
+
   const inputFocus = useRef();
   const dispatch = useDispatch();
   const map = useMap()
@@ -63,8 +66,18 @@ function SearchBar({ locator }) {
   const onFormSubmit = e => {
     e.preventDefault();
     setInput("");
-    setBarOpened(false);
-    dispatch(getLocationByAddress(input))
+    
+    
+    dispatch({type: 'RESET_ROUTE'})
+    dispatch(getLocationByAddress(input)).then((result) => {
+      if(result) {
+        setSearchError(false);
+        setSearchSuccess(true)
+      } else {
+        setSearchSuccess(false);
+        setSearchError(true)
+      }
+    });
   };
 
   useEffect(() => {
@@ -88,7 +101,7 @@ function SearchBar({ locator }) {
   }, [barOpened, map])
 
   useEffect(() => {
-    if(locator.searchLocation && locator.searchResult) {
+    if(locator.searchLocation && locator.searchResult && searchSuccess) {
       const params = {
         travelMethod: locator.travelMethod || 'driving-car',
         start: {
@@ -100,10 +113,10 @@ function SearchBar({ locator }) {
           lng: locator.searchResult.locationProperties.lng
         }
       };
-      console.log('hi from search bar get route w/ params', params);
+      setSearchSuccess(false);
       dispatch(getRoute(params));
     }
-  }, [locator, dispatch]);
+  }, [locator, dispatch, searchSuccess]);
   
   return (<>
       <Form
@@ -114,13 +127,9 @@ function SearchBar({ locator }) {
             inputFocus.current.focus();
           }
         }}
-        onBlur={() => {
-          // setBarOpened(false);
-        }}
         onSubmit={onFormSubmit}
-        formColorPrimary={'#eeeeee'}
-        formColorSecondary={'#f28e1c'}
-      >
+        formColorPrimary={searchError ? '#ffcccc' : '#eee'}
+        formColorSecondary={searchError ? '#ff523f' : '#f28e1c'}>
         {!barOpened && 
         <SearchButton 
           type="submit" 
@@ -129,10 +138,14 @@ function SearchBar({ locator }) {
           Click to search
         </SearchButton>}
        { barOpened && <Input
-          onChange={e => setInput(e.target.value)}
+          onChange={e => {
+            setSearchError(false);
+            setInput(e.target.value)
+          }}
           ref={inputFocus}
           value={input}
           barOpened={barOpened}
+          color={searchError ? '#ff523f' : '#141414'}
           placeholder="Search by postcode, address or city"
         />}
       </Form>

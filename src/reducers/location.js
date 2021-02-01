@@ -1,4 +1,4 @@
-import { BREWERIES_SET, SEARCH_LOCATION_SET, INPUT_LOCATION_NOT_FOUND, ROUTE_SET, TRAVEL_METHOD_UPDATED } from '../actions/location';
+import { BREWERIES_SET, SEARCH_LOCATION_SET, INPUT_LOCATION_NOT_FOUND, ROUTE_SET, TRAVEL_METHOD_UPDATED, RESET_ROUTE, INPUT_LOCATION_UPDATED } from '../actions/location';
 import {sortBreweriesByDistance} from '../lib/calculator';
 
 export default function (state = {}, action = {}) {
@@ -13,7 +13,6 @@ export default function (state = {}, action = {}) {
           searchResult: sortBreweriesByDistance(state.breweries, action.payload)[0], 
           searchLocation: action.payload,
           sortedBreweries: sortBreweriesByDistance(state.breweries, action.payload),
-          route: null
         };
       } else {
         return state;
@@ -22,8 +21,13 @@ export default function (state = {}, action = {}) {
       return {...state, searchError: 'Input location not found'}
     case TRAVEL_METHOD_UPDATED:
       return {...state, travelMethod: action.payload}
+    case RESET_ROUTE:
+      return {...state, route: null}
     case ROUTE_SET:
-      return {...state, route: action.payload}
+      return {
+        ...state, 
+        route: action.payload
+      }
     default:
       return state;
   }

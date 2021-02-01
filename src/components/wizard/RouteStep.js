@@ -112,7 +112,7 @@ function RouteStep({ onDone }) {
       setCurrentLocation(locator.searchLocation.postcode)
       setLocationFound(false);
     }
-    if(locator.searchLocation && locator.searchResult) {
+    if(locator.searchLocation && locator.searchResult && !locator.route) {
       const params = {
         travelMethod: locator.travelMethod || 'driving-car',
         start: {
