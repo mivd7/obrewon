@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FeatureGroup, LayerGroup, LayersControl, MapContainer } from 'react-leaflet'
+import { FeatureGroup, LayerGroup, LayersControl, MapContainer, GeoJSON } from 'react-leaflet'
 import { useDispatch, useSelector } from 'react-redux';
 
 import ViewControl from './ViewControl';
@@ -77,7 +77,11 @@ const MapView = ({ breweries }) => {
               {breweries && breweries.map(brewery => <Brewery key={breweries.indexOf(brewery)} brewery={brewery}/>)}
               {locator && locator.searchLocation && <LocationMarker markerPosition={{lat: locator.searchLocation.lat, lng: locator.searchLocation.lon}}/>}
             </FeatureGroup>
-            {wizardCompleted && <Route/>}              
+            {/* {wizardCompleted && <Route/>}               */}
+            {wizardCompleted && locator && locator.route && 
+              <LayerGroup name="route">
+                <GeoJSON data={locator.route}/>
+              </LayerGroup>}
           </Overlay>
         </LayersControl>
       </MapContainer>

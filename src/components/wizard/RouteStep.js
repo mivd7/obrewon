@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { DirectionsCar, DirectionsBike } from '@styled-icons/material';
 
-import { Box, GridElement } from './SetupWizard.style';
-import { getLocationByAddress, updateTravelMethod } from '../../actions/location';
+import { GridElement } from './SetupWizard.style';
+import { getLocationByAddress, getRoute, updateTravelMethod } from '../../actions/location';
 
 const List = styled.ul`
   list-style: none;
@@ -101,19 +101,43 @@ const SubmitButton = styled.button`
 
 function RouteStep({ onDone }) {
   const locator = useSelector(state => state.location);
-  const [currentLocation, setCurrentLocation] = useState(locator.searchLocation.postcode || '');
+  const [locationFound, setLocationFound] = useState(false);
+  const [currentLocation, setCurrentLocation] = useState('');
   const [travelMethod, setTravelMethod] = useState('driving-car');
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    if(!locationFound && locator.searchLocation) {
+      //await searchLocation then set input value to zipcode
+      setCurrentLocation(locator.searchLocation.postcode)
+      setLocationFound(false);
+    }
+    if(locator.searchLocation && locator.searchResult) {
+      const params = {
+        travelMethod: locator.travelMethod || 'driving-car',
+        start: {
+          lat: locator.searchLocation.lat,
+          lng: locator.searchLocation.lon
+        },
+        end: {
+          lat: locator.searchResult.locationProperties.lat,
+          lng: locator.searchResult.locationProperties.lng
+        }
+      };
+      dispatch(getRoute(params));
+    }
+  }, [locator, dispatch, locationFound])
+
   const handleSubmit = () => {
     dispatch(updateTravelMethod(travelMethod)); 
-    dispatch(getLocationByAddress(currentLocation))
+    dispatch(getLocationByAddress(currentLocation));
+    //dispatch(getRoute(params)
     onDone(true);
   }
 
   return(<>
     {locator.searchLocation && locator.searchResult && <>
-    <GridElement gridAutoFlow="row" columnStart="1" columnEnd="0" align="center">
+    <GridElement gridAutoFlow="row" columnStart="0" columnEnd="0" align="center">
       <Form>
           <h2>Your nearest open brewery is <span style={{color: '#f28e1c'}}>{locator.searchResult.name}</span> in <span style={{color: '#f28e1c'}}>{locator.searchResult.city}</span></h2>
           <Label>
@@ -151,7 +175,8 @@ function RouteStep({ onDone }) {
                 <p style={{marginTop: 5, color: '#f28e1c'}}>Wear a helmet on your return!</p>}
             </div>
           </Label>
-          <SubmitButton 
+          <SubmitButton
+            type="submit" 
             buttonColor={'#eeeeee'}
             buttonTextColor={'#f28e1c'}
             onClick={handleSubmit}>

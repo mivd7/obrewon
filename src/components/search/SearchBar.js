@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useMap } from "react-leaflet";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { getLocationByAddress } from "../../actions/location";
+import { getLocationByAddress, getRoute } from "../../actions/location";
 
 const Form = styled.form`
   position: relative;
@@ -54,11 +54,12 @@ const SearchButton = styled.button`
 
 function SearchBar({ locator }) {
   const [input, setInput] = useState("");
-  const [barOpened, setBarOpened] = useState(true);
+  const [barOpened, setBarOpened] = useState(false);
+  // const [searchQuerySubmitted, setSearchQuerySubmitted] = useState(false)
   const inputFocus = useRef();
   const dispatch = useDispatch();
   const map = useMap()
-
+  
   const onFormSubmit = e => {
     e.preventDefault();
     setInput("");
@@ -85,6 +86,25 @@ function SearchBar({ locator }) {
       if (map.tap) map.tap.enable();
     }
   }, [barOpened, map])
+
+  useEffect(() => {
+    if(locator.searchLocation && locator.searchResult) {
+      const params = {
+        travelMethod: locator.travelMethod || 'driving-car',
+        start: {
+          lat: locator.searchLocation.lat,
+          lng: locator.searchLocation.lon
+        },
+        end: {
+          lat: locator.searchResult.locationProperties.lat,
+          lng: locator.searchResult.locationProperties.lng
+        }
+      };
+      console.log('hi from search bar get route w/ params', params);
+      dispatch(getRoute(params));
+    }
+  }, [locator, dispatch]);
+  
   return (<>
       <Form
         barOpened={barOpened}

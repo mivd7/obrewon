@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {ORS_API_KEY, GEOAPIFY_API_KEY} from '../constants';
+import { setUserLocation } from './user';
 
 export const BREWERIES_SET = 'BREWERIES_SET';
 export const SEARCH_LOCATION_SET = 'SEARCH_LOCATION_SET';
@@ -48,6 +49,7 @@ export const getLocationByAddress = (params) => (dispatch) => {
       .then(res => {
         if (res.data.features.length > 0) {
           dispatch(setInputLocation(res.data.features[0].properties))
+          dispatch(setUserLocation(res.data.features[0].properties))
         } else {
           dispatch(setNotFoundError())
         }

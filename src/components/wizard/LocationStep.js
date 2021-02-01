@@ -11,6 +11,7 @@ function LocationStep({user, onLocationConfirmed}) {
 
   const onClick = (confirmed) => {
       if(confirmed) {
+        console.log()
         dispatch(getLocationByAddress(user.address.formatted));
         setAddressIncorrect(false);
         onLocationConfirmed();
@@ -30,7 +31,7 @@ function LocationStep({user, onLocationConfirmed}) {
       <p>Hold on! O'Brewon is trying to find you on the map...</p>
       <img src="https://media.giphy.com/media/2kSfEOhJJApaYXsRJ7/giphy.gif" alt="glass filling" style={{maxWidth: '50%', margin: '10px'}}/>
     </>}
-    {user && user.locationLoading && !user.locationLoading && <>
+    {user && user.locationError && <>
       <p>Obrewon couldn't find your location! Either allow your browser to use your location or just tell O'Brewon below</p>
       <Form 
         onSubmit={submitCorrectedAddress}

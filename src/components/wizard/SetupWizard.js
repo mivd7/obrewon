@@ -15,7 +15,7 @@ const SetupWizard = ({ showModal, closeWizard }) => {
   const dispatch = useDispatch();
   
   useEffect(() => {
-    if(user.geolocation && !user.address) {
+    if(user.geolocation && user.geolocation.coords && !user.address) {
       dispatch(getAddressByLocation(user.geolocation.coords))
     }
   }, [user, dispatch]);

@@ -5,9 +5,9 @@ export default function (state = {}, action = {}) {
     case USER_LOCATION_LOADING: 
       return {...state, locationLoading: true}
     case USER_LOCATION_SET:
-      return {...state, locationLoading: false, geolocation: action.payload, geolocationError: false};
+      return {...state, locationLoading: false, geolocation: action.payload, locationError: false};
     case USER_LOCATION_ERROR:
-      return {...state, locationLoading: false, geolocationError: true}
+      return {...state, locationLoading: false, locationError: true}
     case USER_ADDRESS_SET:
       return {...state, address: action.payload}
     default:
