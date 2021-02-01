@@ -1,7 +1,7 @@
 import L from 'leaflet';
-import beer from '../assets/beer.svg';
-import youAreHere from '../assets/you-are-here-marker.svg';
-import home from '../assets/home.svg';
+import beer from '../../assets/beer.svg';
+import youAreHere from '../../assets/you-are-here-marker.svg';
+import home from '../../assets/home.svg';
 
 const youAreHereIcon = new L.Icon({
     iconUrl: youAreHere,

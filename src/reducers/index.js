@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import brewery from './brewery';
+import location from './location';
 import user from './user';
 
 export default combineReducers({
-    brewery,
+    location,
     user
 })

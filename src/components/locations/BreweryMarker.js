@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Marker, Popup } from 'react-leaflet';
-import { beerIcon, animatedBeerIcon } from '../../lib/icons';
+import { beerIcon, animatedBeerIcon } from '../map/icons';
 
 function BreweryMarker({ markerPosition, brewery, closest }) {
   const markerRef = useRef(null);

@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useMap } from "react-leaflet";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { getInputLocation } from "../../actions/brewery";
+import { getLocationByAddress } from "../../actions/location";
 
 const Form = styled.form`
   position: relative;
@@ -9,22 +10,20 @@ const Form = styled.form`
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  background-color: #F4F4F4;
-  /* Change width of the form depending if the bar is opened or not */
+  background-color: #eeeeee;
   width: ${(props) => (props.barOpened ? "30rem" : "4rem")};
-  /* If bar opened, normal cursor on the whole form. If closed, show pointer on the whole form so user knows he can click to open it */
   cursor: ${(props) => (props.barOpened ? "auto" : "pointer")};
   padding: 1rem;
   height: 1rem;
   border-radius: .5rem;
-  border: .1rem solid black;
+  border: .1rem solid #141414;
   transition: width 300ms cubic-bezier(0.645, 0.045, 0.355, 1);
   z-index: 9999;
   margin-top: 1rem;
 `;
 
 const Input = styled.input`
-  font-size: 14px;
+  font-size: 20px;
   line-height: 1;
   background-color: transparent;
   width: 100%;
@@ -37,7 +36,7 @@ const Input = styled.input`
     outline: none;
   }
   &::placeholder {
-    color: grey;
+    color: #eeeee;
   }
 `;
 
@@ -48,23 +47,45 @@ const Button = styled.button`
   background-color: transparent;
   border: none;
   outline: none;
-  color: black;
+  color: #141414;
+  text-align: left;
+  font-size: 14px;
 `;
 
-function SearchBar() {
+function SearchBar({ locator }) {
   const [input, setInput] = useState("");
   const [barOpened, setBarOpened] = useState(false);
   const formRef = useRef();
   const inputFocus = useRef();
   const dispatch = useDispatch();
+  const map = useMap()
 
   const onFormSubmit = e => {
     e.preventDefault();
     setInput("");
     setBarOpened(false);
-    dispatch(getInputLocation(input))
+    dispatch(getLocationByAddress(input))
   };
-  
+
+  useEffect(() => {
+    if(barOpened) {
+      map.dragging.disable();
+      map.touchZoom.disable();
+      map.doubleClickZoom.disable();
+      map.scrollWheelZoom.disable();
+      map.boxZoom.disable();
+      map.keyboard.disable();
+      if (map.tap) map.tap.disable();
+    } else {
+      map.dragging.enable();
+      map.touchZoom.enable();
+      map.doubleClickZoom.enable();
+      map.scrollWheelZoom.enable();
+      map.boxZoom.enable();
+      map.keyboard.enable();
+      if (map.tap) map.tap.enable();
+    }
+  }, [barOpened, map])
   return (<>
       <Form
         barOpened={barOpened}
@@ -74,12 +95,12 @@ function SearchBar() {
             inputFocus.current.focus();
           }
         }}
-        onFocus={() => {
-          setBarOpened(true);
-          if(inputFocus.current) {
-            inputFocus.current.focus();
-          }
-        }}
+        // onFocus={() => {
+        //   setBarOpened(true);
+        //   if(inputFocus.current) {
+        //     inputFocus.current.focus();
+        //   }
+        // }}
         onBlur={() => {
           setBarOpened(false);
         }}

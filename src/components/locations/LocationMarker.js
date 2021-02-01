@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 // import { useMapEvents } from 'react-leaflet';
 import { Marker, Popup } from 'react-leaflet';
-import { homeIcon, youAreHereIcon } from '../../lib/icons';
+import { homeIcon, youAreHereIcon } from '../map/icons';
 
 function LocationMarker({ markerPosition, geolocation }) {
   const markerRef = useRef(null);

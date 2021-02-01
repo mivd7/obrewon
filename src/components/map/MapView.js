@@ -3,67 +3,81 @@ import { FeatureGroup, LayerGroup, LayersControl, MapContainer } from 'react-lea
 import { useDispatch, useSelector } from 'react-redux';
 
 import ViewControl from './ViewControl';
+import MapBackground from './MapBackground';
+import Help from './Help';
 import SearchBar from '../search/SearchBar';
+import SetupWizard from '../wizard/SetupWizard';
 import Brewery from '../locations/Brewery';
 import LocationMarker from '../locations/LocationMarker';
-import {setBreweries} from '../../actions/brewery';
-import MapBackground from './MapBackground';
+import { setBreweries } from '../../actions/location';
 import { getMapBounds } from '../../lib/calculator';
+import Route from './Route';
+
 const { Overlay } = LayersControl;
 
-const MapView = ({breweries, userLocation}) => {
+const MapView = ({ breweries }) => {
   const [mapBounds, setMapBounds] = useState([
     [53.044676, 5.9428943],
     [50.9819254, 4.4488786],
   ]);
   const [showSearchResults, setShowSearchResults] = useState(false);
-  const [markerGroupRef, setMarkerGroupRef] = useState(null);
+  const [wizardCompleted, setWizardCompleted] = useState(false);
+  const [disableMapInteractions, setDisableMapInteractions] = useState(false);
   const dispatch = useDispatch();
-  const breweryStore = useSelector(state => state.brewery);
-  const user = useSelector(state => state.user);
+  //location?
+  const locator = useSelector(state => state.location);
+
+  const toggleMapInteractions = (active) => {
+    setDisableMapInteractions(active)
+  }
 
   useEffect(() => {
-    if(markerGroupRef) {
-      setMapBounds(markerGroupRef.getBounds())
+    if(!locator.breweries) {
+      //set breweries to store from breweries json, could be replaced by API call
+      dispatch(setBreweries(breweries))
     }
-  }, [markerGroupRef])
+  }, [dispatch, breweries, locator.breweries]);
 
   useEffect(() => {
-    dispatch(setBreweries(breweries))
-  }, [dispatch, breweries]);
-
-  useEffect(() => {
-    if(breweryStore.searchResult) {
+    if(locator.searchResult && locator.searchLocation) {
       setShowSearchResults(true); 
       const bounds = getMapBounds([{
-        lat: breweryStore.searchLocation.lat,
-        lng: breweryStore.searchLocation.lon
+        lat: locator.searchLocation.lat,
+        lng: locator.searchLocation.lon
       }, {
-        lat: breweryStore.searchResult.locationProperties.lat,
-        lng: breweryStore.searchResult.locationProperties.lng
+        lat: locator.searchResult.locationProperties.lat,
+        lng: locator.searchResult.locationProperties.lng
       }])
       setMapBounds(bounds);
     }
-  }, [breweryStore]);
+  }, [locator]);
 
   return (<>
      <MapContainer bounds={mapBounds} scrollWheelZoom={true}>
-        {showSearchResults ? 
-          <ViewControl center={{lat: breweryStore.searchResult.locationProperties.lat, lng: breweryStore.searchResult.locationProperties.lng }} zoom={14} bounds={mapBounds}/> : 
+        {showSearchResults && locator && locator.searchResult ?
+          <ViewControl center={{lat: locator.searchResult.locationProperties.lat, lng: locator.searchResult.locationProperties.lng }} zoom={14} bounds={mapBounds}/> : 
           <ViewControl zoom={14} /> }
         <LayersControl position="topright">
           <MapBackground/>
           <Overlay checked name="Search">
             <LayerGroup>
-                <SearchBar/>
+                <SearchBar locator={locator} onSearchBarActive={toggleMapInteractions}/>
+            </LayerGroup>
+          </Overlay>
+          <Overlay checked name="Tools">
+            <LayerGroup>
+              <Help/>
+            </LayerGroup>
+            <LayerGroup>
+              <SetupWizard showModal={true} closeWizard={() => setWizardCompleted(true)}/>
             </LayerGroup>
           </Overlay>
           <Overlay checked name="Markers" >
-            <FeatureGroup ref={ref => setMarkerGroupRef(ref)}>
+            <FeatureGroup>
               {breweries && breweries.map(brewery => <Brewery key={breweries.indexOf(brewery)} brewery={brewery}/>)}
-              {breweryStore && breweryStore.searchLocation &&  <LocationMarker markerPosition={{lat: breweryStore.searchLocation.lat, lng: breweryStore.searchLocation.lon}}/>}
-              {user &&  user.geolocation && !user.locationLoading && !user.locationError &&  <LocationMarker markerPosition={user.geolocation.coords} geolocation={user.geolocation}/>}
+              {locator && locator.searchLocation && <LocationMarker markerPosition={{lat: locator.searchLocation.lat, lng: locator.searchLocation.lon}}/>}
             </FeatureGroup>
+            {wizardCompleted && <Route/>}              
           </Overlay>
         </LayersControl>
       </MapContainer>
