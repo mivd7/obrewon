@@ -2,15 +2,13 @@ const dayIndex = new Date().getDay();
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 export function sortBreweriesByDistance(breweries, payload) {
-  const result = breweries.filter(brewery => brewery.open.indexOf(days[dayIndex]) !== -1)
+  return breweries.filter(brewery => brewery.open.indexOf(days[dayIndex]) !== -1)
                   .map(brewery => {
                     return {
                       ...brewery, 
                       distance: getDistanceInKm(brewery.locationProperties.lat, brewery.locationProperties.lng, payload.lat, payload.lon)
                     }})
                   .sort((a,b) => a.distance - b.distance);
-  console.log('sort result', result);
-  return result;
 }
 
 function getDistanceInKm(lat1,lon1,lat2,lon2) {

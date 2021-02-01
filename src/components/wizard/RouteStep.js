@@ -4,11 +4,7 @@ import styled from "styled-components";
 import { DirectionsCar, DirectionsBike } from '@styled-icons/material';
 
 import { Box, GridElement } from './SetupWizard.style';
-// import homeIcon from '../../assets/home.svg';
-// import breweryIcon from '../../assets/brewery.svg';
-// import carIcon from '../../assets/car.svg';
-// import bikeIcon from '../../assets/bike.svg';
-
+import { getLocationByAddress, updateTravelMethod } from '../../actions/location';
 
 const List = styled.ul`
   list-style: none;
@@ -104,24 +100,20 @@ const SubmitButton = styled.button`
 `;
 
 function RouteStep({ onDone }) {
-  //or cycling-regular
-  const [travelMethod, setTravelMethod] = useState('driving-car');
   const locator = useSelector(state => state.location);
   const [currentLocation, setCurrentLocation] = useState(locator.searchLocation.postcode || '');
+  const [travelMethod, setTravelMethod] = useState('driving-car');
   const dispatch = useDispatch();
 
-  // const fetchRoute = () => {
-  //   const params = {
-      
-  //   }
-  // }
+  const handleSubmit = () => {
+    dispatch(updateTravelMethod(travelMethod)); 
+    dispatch(getLocationByAddress(currentLocation))
+    onDone(true);
+  }
 
   return(<>
     {locator.searchLocation && locator.searchResult && <>
     <GridElement gridAutoFlow="row" columnStart="1" columnEnd="0" align="center">
-      <Box>
-        
-      </Box>
       <Form>
           <h2>Your nearest open brewery is <span style={{color: '#f28e1c'}}>{locator.searchResult.name}</span> in <span style={{color: '#f28e1c'}}>{locator.searchResult.city}</span></h2>
           <Label>
@@ -153,25 +145,30 @@ function RouteStep({ onDone }) {
                 <BikeIcon />
               </TravelMethodButton>
             </span>
+            <div style={{width: '100%'}}>
+              {travelMethod === 'driving-car' ? 
+                <p style={{marginTop: 5, color: '#f28e1c'}}>Don't drink and drive!</p> : 
+                <p style={{marginTop: 5, color: '#f28e1c'}}>Wear a helmet on your return!</p>}
+            </div>
           </Label>
           <SubmitButton 
             buttonColor={'#eeeeee'}
             buttonTextColor={'#f28e1c'}
-            onClick={() => onDone(true)}>
+            onClick={handleSubmit}>
             Show Route
           </SubmitButton>
         </Form>
     </GridElement>
     <GridElement gridAutoFlow="row" columnStart="0" columnEnd="0">
       <List>
-        <Box>
+        {/* <Box> */}
             <h2>Breweries Open Today</h2>
             {locator.sortedBreweries && locator.sortedBreweries.map((brewery, index) => <ListItem key={brewery.name}>
               <Title>{index + 1}. {brewery.name}</Title><br/>
               <span>{brewery.address}, {brewery.zipcode}, {brewery.city}</span><br/>
               <span>Distance: {Math.round(brewery.distance)} km</span>
             </ListItem>)}
-        </Box>
+        {/* </Box> */}
       </List>
     </GridElement>
     

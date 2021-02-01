@@ -5,6 +5,7 @@ export const BREWERIES_SET = 'BREWERIES_SET';
 export const SEARCH_LOCATION_SET = 'SEARCH_LOCATION_SET';
 export const INPUT_LOCATION_NOT_FOUND = 'INPUT_LOCATION_NOT_FOUND';
 export const ROUTE_SET = 'ROUTE_SET';
+export const TRAVEL_METHOD_UPDATED = 'TRAVEL_METHOD_UPDATED';
 export const FILTER_OPEN_BREWERIES = 'FILTER_OPEN_BREWERIES';
 
 export function setBreweries(payload) {
@@ -30,6 +31,13 @@ export function setNotFoundError() {
 export function setRoute(payload) {
   return {
     type: ROUTE_SET,
+    payload
+  }
+}
+
+export function updateTravelMethod(payload) {
+  return {
+    type: TRAVEL_METHOD_UPDATED,
     payload
   }
 }
