@@ -6,23 +6,9 @@ export const ConfirmButton = styled.button`
   padding: 10px 24px;
   background: ${props => props.buttonColor};
   color: ${props => props.buttonTextColor};
-  border: 1px solid #3FB984;
+  border: 1px solid ${props => props.buttonTextColor};
   border-radius: .5rem;
   margin: 5px 10px;
-  font-weight: bold;
-  font-size: 16px;
-  cursor: pointer;
-  &:focus {
-    background: ${props => props.buttonColor};
-    color: ${props => props.buttonTextColor};
-  }
-`;
-
-export const SearchButton = styled.button`
-  padding: 10px 24px;
-  background: black;
-  color: white;
-  border: none;
   font-weight: bold;
   font-size: 16px;
   cursor: pointer;
@@ -33,30 +19,43 @@ export const Form = styled.form`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #F4F4F4;
-  width: 30rem;
   padding: 1rem;
   height: 1rem;
   border-radius: .5rem;
-  border: .1rem solid black;
   transition: width 300ms cubic-bezier(0.645, 0.045, 0.355, 1);
+  margin-top: 1rem;
+  background: ${props => props.formColorPrimary};
+  border: 1px solid ${props => props.formColorSecondary};
 `;
 
 export const Input = styled.input`
   font-size: 14px;
   line-height: 1;
-  background-color: transparent;
   width: 100%;
+  margin-left: ${props => (props.barOpened ? "1rem" : "0rem")};
+  transition: margin 300ms cubic-bezier(0.645, 0.045, 0.355, 1);
   border: none;
-  color: black;
-  &:focus,
-  &:active {
-    outline: none;
-  }
+  background-color: inherit;
+  color: #141414;
+  outline: none;
   &::placeholder {
-    color: grey;
+    color: #eeeee;
   }
 `;
+
+export const SearchButton = styled.button`
+  line-height: 1;
+  pointer-events: auto;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  text-align: left;
+  font-size: 14px;
+  font-weight: bold;
+  color: ${props => props.buttonTextColor}
+`;
+
 
 export const ToastImg = styled.img`
   width: 25%;
@@ -90,6 +89,9 @@ export const ModalWrapper = styled.div`
   p {
     font-size: 16px;
     margin: 0;
+  }
+  @media (max-width: 400px) {
+    width: 100%;
   }
 `;
 

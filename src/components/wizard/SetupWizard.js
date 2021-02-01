@@ -67,13 +67,13 @@ const SetupWizard = ({ showModal, closeWizard }) => {
               </GridElement>
               <GridElement gridAutoFlow="column" align="center">
                 <Box>
-                  <BackButton onClick={handleBack} color={stepIndex === 0 ? "#DCDAD1" : "#3fb984"}/>
+                  <BackButton onClick={handleBack} color={stepIndex === 0 ? "#eeeeee" : "#f28e1c"}/>
                 </Box>
                 <Box>
                   <p>Step {stepIndex + 1} of {steps.length}</p>
                 </Box>
                 <Box>
-                  <NextButton onClick={handleNext} color={stepIndex === steps.length ? "#DCDAD1" : "#3fb984"}/>
+                  <NextButton onClick={handleNext} color={(stepIndex + 1) === steps.length ? "#eeeeee" : "#f28e1c"}/>
                 </Box>
               </GridElement>
             </ModalWrapper>

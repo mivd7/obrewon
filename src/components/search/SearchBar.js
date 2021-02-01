@@ -10,27 +10,27 @@ const Form = styled.form`
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  background-color: #eeeeee;
   width: ${(props) => (props.barOpened ? "30rem" : "4rem")};
   cursor: ${(props) => (props.barOpened ? "auto" : "pointer")};
   padding: 1rem;
   height: 1rem;
   border-radius: .5rem;
-  border: .1rem solid #141414;
   transition: width 300ms cubic-bezier(0.645, 0.045, 0.355, 1);
   z-index: 9999;
   margin-top: 1rem;
+  background: ${props => props.formColorPrimary};
+  border: 1px solid ${props => props.formColorSecondary};
 `;
 
 const Input = styled.input`
   font-size: 20px;
   line-height: 1;
-  background-color: transparent;
   width: 100%;
   margin-left: ${props => (props.barOpened ? "1rem" : "0rem")};
-  border: none;
-  color: black;
   transition: margin 300ms cubic-bezier(0.645, 0.045, 0.355, 1);
+  border: none;
+  background-color: inherit;
+  color: #141414
   &:focus,
   &:active {
     outline: none;
@@ -40,22 +40,21 @@ const Input = styled.input`
   }
 `;
 
-const Button = styled.button`
+const SearchButton = styled.button`
   line-height: 1;
   pointer-events: ${props => (props.barOpened ? "auto" : "none")};
   cursor: ${props => (props.barOpened ? "pointer" : "none")};
   background-color: transparent;
   border: none;
   outline: none;
-  color: #141414;
   text-align: left;
   font-size: 14px;
+  color: ${props => props.buttonTextColor}
 `;
 
 function SearchBar({ locator }) {
   const [input, setInput] = useState("");
-  const [barOpened, setBarOpened] = useState(false);
-  const formRef = useRef();
+  const [barOpened, setBarOpened] = useState(true);
   const inputFocus = useRef();
   const dispatch = useDispatch();
   const map = useMap()
@@ -95,21 +94,20 @@ function SearchBar({ locator }) {
             inputFocus.current.focus();
           }
         }}
-        // onFocus={() => {
-        //   setBarOpened(true);
-        //   if(inputFocus.current) {
-        //     inputFocus.current.focus();
-        //   }
-        // }}
         onBlur={() => {
-          setBarOpened(false);
+          // setBarOpened(false);
         }}
         onSubmit={onFormSubmit}
-        ref={formRef}
+        formColorPrimary={'#eeeeee'}
+        formColorSecondary={'#f28e1c'}
       >
-        {!barOpened && <Button type="submit" barOpened={barOpened}>
+        {!barOpened && 
+        <SearchButton 
+          type="submit" 
+          barOpened={barOpened}
+          buttonTextColor={'#f28e1c'}>
           Click to search
-        </Button>}
+        </SearchButton>}
        { barOpened && <Input
           onChange={e => setInput(e.target.value)}
           ref={inputFocus}

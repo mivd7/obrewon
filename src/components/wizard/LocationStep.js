@@ -5,16 +5,11 @@ import { getLocationByAddress } from "../../actions/location";
 import { Box, ConfirmButton, Form, Input, SearchButton } from "./SetupWizard.style";
 
 function LocationStep({user, onLocationConfirmed}) {
-  const [buttonColor, setButtonColor] = useState('transparent');
-  const [buttonTextColor, setButtonTextColor] = useState('#3FB984');
   const [addressIncorrect, setAddressIncorrect] = useState(false);
   const [address, setAddress] = useState('');
   const dispatch = useDispatch();
 
   const onClick = (confirmed) => {
-      setButtonColor('#3FB984')
-      setButtonTextColor('#f4f4f4')
-      
       if(confirmed) {
         dispatch(getLocationByAddress(user.address.formatted));
         setAddressIncorrect(false);
@@ -35,7 +30,25 @@ function LocationStep({user, onLocationConfirmed}) {
       <p>Hold on! O'Brewon is trying to find you on the map...</p>
       <img src="https://media.giphy.com/media/2kSfEOhJJApaYXsRJ7/giphy.gif" alt="glass filling" style={{maxWidth: '50%', margin: '10px'}}/>
     </>}
-    {user && user.address && <>
+    {user && user.locationLoading && !user.locationLoading && <>
+      <p>Obrewon couldn't find your location! Either allow your browser to use your location or just tell O'Brewon below</p>
+      <Form 
+        onSubmit={submitCorrectedAddress}
+        formColorPrimary={'#eeeeee'}
+        formColorSecondary={'#f28e1c'}>
+        <Input
+          onChange={e => setAddress(e.target.value)}
+          value={address}
+          placeholder="Enter your location (zipcode, address or city)" />
+          <ConfirmButton 
+              buttonColor={'transparent'}
+              buttonTextColor={'#f28e1c'}
+              onClick={submitCorrectedAddress}>
+            Search
+          </ConfirmButton>
+      </Form>
+    </>}
+    {user && user.address && !user.locationLoading && <>
       <h2>According to O'Brewon your location is:</h2>
       <p>{user.address.street}, {user.address.postcode}</p>
       <p>{user.address.city}, {user.address.country}</p>
@@ -43,28 +56,31 @@ function LocationStep({user, onLocationConfirmed}) {
         <>
           <h2>Is this correct?</h2>
             <ConfirmButton 
-              buttonColor={buttonColor}
-              buttonTextColor={buttonTextColor}
+              buttonColor={'transparent'}
+              buttonTextColor={'#f28e1c'}
               onClick={() => onClick(true)}>
               Yes
             </ConfirmButton>
             <ConfirmButton 
-              buttonColor={buttonColor}
-              buttonTextColor={buttonTextColor}
+              buttonColor={'transparent'}
+              buttonTextColor={'#f28e1c'}
               onClick={() => onClick(false)}>
               No
             </ConfirmButton>
         </>}  
       {addressIncorrect && <>
           <h2>What is your address then?</h2>
-          <Form onSubmit={submitCorrectedAddress}>
+          <Form 
+            onSubmit={submitCorrectedAddress}
+            formColorPrimary={'transparent'}
+            formColorSecondary={'#f28e1c'}>
             <Input
               onChange={e => setAddress(e.target.value)}
               value={address}
               placeholder="Search by postcode, address or city" />
               <SearchButton 
-                buttonColor={buttonColor}
-                buttonTextColor={buttonTextColor}
+                buttonColor={'transparent'}
+                buttonTextColor={'#f28e1c'}
                 onClick={submitCorrectedAddress}>
                   Search
               </SearchButton>
