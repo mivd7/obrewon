@@ -1,6 +1,6 @@
 import { USER_ADDRESS_SET, USER_LOCATION_ERROR, USER_LOCATION_LOADING, USER_LOCATION_SET } from '../actions/user';
 
-export default function (state = {}, action = {}) {
+export default function user(state = {}, action = {}) {
   switch (action.type) {
     case USER_LOCATION_LOADING: 
       return {...state, locationLoading: true}

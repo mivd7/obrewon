@@ -1,7 +1,7 @@
 import { BREWERIES_SET, SEARCH_LOCATION_SET, INPUT_LOCATION_NOT_FOUND, ROUTE_SET, TRAVEL_METHOD_UPDATED, RESET_ROUTE, DISABLE_OPEN_FILTER, ENABLE_OPEN_FILTER } from '../actions/location';
 import {sortBreweriesByDistance} from '../lib/calculator';
 
-export default function (state = {}, action = {}) {
+export default function location(state = {}, action = {}) {
   switch (action.type) {
     case BREWERIES_SET:
       return {...state, breweries: action.payload, filteredBreweries: []};

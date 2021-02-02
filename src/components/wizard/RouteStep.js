@@ -190,9 +190,6 @@ function RouteStep({ onDone }) {
     setShowAllBreweries(!showAllBreweries)
   }
 
-  const getRouteToBrewery = () => {
-    console.log('get route to clicked')
-  }
 
   return(<>
     {locator.searchLocation && locator.searchResult && <>
@@ -252,7 +249,7 @@ function RouteStep({ onDone }) {
           </span>
         </SwitchContainer>
         {showAllBreweries && locator.breweries && locator.breweries.map((brewery, index) => 
-          <div key={brewery.name} onClick={getRouteToBrewery}>
+          <div key={brewery.name}>
             <ListItem isOpen={locator.filteredBreweries.indexOf(brewery) !== -1}>
               <Title>{index + 1}. {brewery.name}</Title><br/>
               <span>{brewery.address}, {brewery.zipcode}, {brewery.city}</span><br/>

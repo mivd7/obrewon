@@ -29,7 +29,6 @@ export default function ViewControl({ zoom, bounds, disableMapInteractions }) {
     dispatch({type: "USER_LOCATION_LOADING"});
     const onLocationError = event => {
       //set location error in store when user location not found
-      console.log(event.message);
       dispatch({type: 'USER_LOCATION_ERROR'});
     }
 

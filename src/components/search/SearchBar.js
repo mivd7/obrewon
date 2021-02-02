@@ -139,7 +139,7 @@ function SearchBar({ locator }) {
           setBarOpened(false);
         }}
         onSubmit={onFormSubmit}
-        formColorPrimary={searchError ? '#ffcccc' : '#eee'}
+        formColorPrimary={searchError ? '#ffcccc' : '#fff'}
         formColorSecondary={searchError ? '#ff523f' : '#141414'}>
         {!barOpened && 
         <SearchButton 
