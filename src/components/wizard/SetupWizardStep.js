@@ -12,7 +12,6 @@ function WelcomeStep() {
 }
 
 export const SetupWizardStep = ({step, handleNext, closeWizard}) => {
-  //user has to have a location
   return (<>
     {step === 'welcome' && <WelcomeStep/>}
     {step === 'location' && <LocationStep onLocationConfirmed={handleNext}/>}

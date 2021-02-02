@@ -81,7 +81,6 @@ const MapView = ({ breweries }) => {
               {breweries && breweries.map(brewery => <Brewery key={breweries.indexOf(brewery)} brewery={brewery}/>)}
               {location && location.searchLocation && <LocationMarker markerPosition={{lat: location.searchLocation.lat, lng: location.searchLocation.lon}}/>}
             </FeatureGroup>
-            {/* {wizardCompleted && <Route/>}               */}
             {wizardCompleted && 
               <Route/>}
           </Overlay>
