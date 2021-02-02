@@ -135,7 +135,7 @@ function RouteStep({ onDone, fromWizard }) {
       //await searchLocation then set input value to zipcode
       setLocationInputValue(location.searchQuery);
     }
-    if(location.travelMethod) {
+    if(location.travelMethod && !userTyping) {
       setTravelMethod(location.travelMethod);
     }
   }, [location, userTyping, locationInputValue])
@@ -193,7 +193,11 @@ function RouteStep({ onDone, fromWizard }) {
   return(<>
     {location.searchLocation && location.searchResult && <>
     <GridElement gridAutoFlow="row" columnStart="0" columnEnd="0" align="center">
-      <Form>
+      <Form
+      onChange={e => {
+        setUserTyping(true);
+        setLocationInputValue(e.target.value)
+      }}>
           <h2>Your nearest brewery is 
             <span style={{color: '#f28e1c'}}> {location.searchResult.name}</span> in <span style={{color: '#f28e1c'}}>{location.searchResult.city}</span>
             {location.filteredBreweries.indexOf(location.searchResult) === -1 && <span> but it's not opened today!</span>}</h2>
