@@ -19,7 +19,8 @@ function LocationStep({onLocationConfirmed}) {
       }
   }
   
-  const submitCorrectedAddress = () => {
+  const submitCorrectedAddress = (e) => {
+    e.preventDefault();
     dispatch(setUserLocation(address));
     dispatch(getLocationByAddress(address)).then(() => {
       onLocationConfirmed();
@@ -36,7 +37,7 @@ function LocationStep({onLocationConfirmed}) {
       <p>Obrewon couldn't find your location!</p>
       <p>Either allow your browser to use your location or just tell O'Brewon below</p>
       <Form 
-        onSubmit={submitCorrectedAddress}
+        onSubmit={e => submitCorrectedAddress(e)}
         formColorPrimary={'transparent'}
         formColorSecondary={'#f28e1c'}>
         <Input
@@ -46,7 +47,7 @@ function LocationStep({onLocationConfirmed}) {
           <SearchButton 
               buttonColor={'transparent'}
               buttonTextColor={'#f28e1c'}
-              onClick={submitCorrectedAddress}>
+              onClick={e => submitCorrectedAddress(e)}>
             Search
           </SearchButton>
       </Form>
@@ -84,7 +85,7 @@ function LocationStep({onLocationConfirmed}) {
               <SearchButton 
                 buttonColor={'transparent'}
                 buttonTextColor={'#f28e1c'}
-                onClick={submitCorrectedAddress}>
+                onClick={e => submitCorrectedAddress(e)}>
                   Search
               </SearchButton>
           </Form>
