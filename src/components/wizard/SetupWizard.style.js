@@ -90,7 +90,8 @@ export const ModalWrapper = styled.div`
     margin: 0;
   }
   @media (max-width: 400px) {
-    width: 100%;
+    width: 95%;
+    border-radius: 0;
   }
 `;
 

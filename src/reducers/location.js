@@ -4,7 +4,7 @@ import {sortBreweriesByDistance} from '../lib/calculator';
 export default function (state = {}, action = {}) {
   switch (action.type) {
     case BREWERIES_SET:
-      return {...state, breweries: action.payload};
+      return {...state, breweries: action.payload, filteredBreweries: []};
     case SEARCH_LOCATION_SET:
       const dayIndex = new Date().getDay();
       const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];

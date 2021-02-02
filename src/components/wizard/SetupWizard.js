@@ -21,7 +21,9 @@ const SetupWizard = ({ showModal, closeWizard }) => {
   }, [user, dispatch]);
 
   const handleNext = () => {
-    setStepIndex(stepIndex + 1);
+    if(steps[stepIndex + 1]) {
+      setStepIndex(stepIndex + 1);
+    }
   }
 
   const handleBack = () => {
