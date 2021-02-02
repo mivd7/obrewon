@@ -6,14 +6,14 @@ import BreweryMarker from "./BreweryMarker"
 const Brewery = ({brewery}) => {
   const {lat, lng} = brewery.locationProperties;
   const [isClosest, setIsClosest] = useState(false);
-  const locator = useSelector(state => state.location);
+  const location = useSelector(state => state.location);
   
   useEffect(() => {
     setIsClosest(false);
-    if(locator.searchResult && locator.searchResult.name === brewery.name) {
+    if(location.searchResult && location.searchResult.name === brewery.name) {
       setIsClosest(true);
     }
-  }, [locator, brewery]);
+  }, [location, brewery]);
 
   return(<>
     {brewery && brewery.locationProperties && <BreweryMarker markerPosition={{lat, lng}} brewery={brewery} closest={isClosest}/>}

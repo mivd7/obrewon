@@ -24,29 +24,29 @@ const MapView = ({ breweries }) => {
   const [wizardCompleted, setWizardCompleted] = useState(false);
   const [disableMapInteractions, setDisableMapInteractions] = useState(false)
   const dispatch = useDispatch();
-  const locator = useSelector(state => state.location);
+  const location = useSelector(state => state.location);
   const geoJsonRef = useRef();
 
   useEffect(() => {
-    if(!locator.breweries) {
+    if(!location.breweries) {
       //set breweries to store from breweries json, could be replaced by API call
       dispatch(setBreweries(breweries))
     }
-  }, [dispatch, breweries, locator.breweries]);
+  }, [dispatch, breweries, location.breweries]);
 
   useEffect(() => {
-    if(locator.searchResult && locator.searchLocation) {
+    if(location.searchResult && location.searchLocation) {
       setShowSearchResults(true); 
       const bounds = getMapBounds([{
-        lat: locator.searchLocation.lat,
-        lng: locator.searchLocation.lon
+        lat: location.searchLocation.lat,
+        lng: location.searchLocation.lon
       }, {
-        lat: locator.searchResult.locationProperties.lat,
-        lng: locator.searchResult.locationProperties.lng
+        lat: location.searchResult.locationProperties.lat,
+        lng: location.searchResult.locationProperties.lng
       }])
       setMapBounds(bounds);
     }
-  }, [locator]);
+  }, [location]);
 
   useEffect(() => {
     if(!wizardCompleted) {
@@ -58,14 +58,14 @@ const MapView = ({ breweries }) => {
   
   return (<>
      <MapContainer bounds={mapBounds} scrollWheelZoom={true}>
-        {showSearchResults && locator && locator.searchResult ?
-          <ViewControl center={{lat: locator.searchResult.locationProperties.lat, lng: locator.searchResult.locationProperties.lng }} zoom={14} bounds={mapBounds} disableMapInteractions={disableMapInteractions}/> : 
+        {showSearchResults && location && location.searchResult ?
+          <ViewControl center={{lat: location.searchResult.locationProperties.lat, lng: location.searchResult.locationProperties.lng }} zoom={14} bounds={mapBounds} disableMapInteractions={disableMapInteractions}/> : 
           <ViewControl zoom={14} /> }
         <LayersControl position="topright">
           <MapBackground/>
           <Overlay checked name="Search">
             <LayerGroup>
-                <SearchBar locator={locator} geoJsonRef={geoJsonRef} onActive={() => setDisableMapInteractions(true)} onClose={() => setDisableMapInteractions(false)}/>
+                <SearchBar location={location} geoJsonRef={geoJsonRef} onActive={() => setDisableMapInteractions(true)} onClose={() => setDisableMapInteractions(false)}/>
             </LayerGroup>
           </Overlay>
           <Overlay checked name="Tools">
@@ -79,7 +79,7 @@ const MapView = ({ breweries }) => {
           <Overlay checked name="Markers" >
             <FeatureGroup>
               {breweries && breweries.map(brewery => <Brewery key={breweries.indexOf(brewery)} brewery={brewery}/>)}
-              {locator && locator.searchLocation && <LocationMarker markerPosition={{lat: locator.searchLocation.lat, lng: locator.searchLocation.lon}}/>}
+              {location && location.searchLocation && <LocationMarker markerPosition={{lat: location.searchLocation.lat, lng: location.searchLocation.lon}}/>}
             </FeatureGroup>
             {/* {wizardCompleted && <Route/>}               */}
             {wizardCompleted && 

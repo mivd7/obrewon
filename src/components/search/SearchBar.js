@@ -62,7 +62,7 @@ const SearchIcon = styled(Search)`
   cursor: pointer;
 `
 
-function SearchBar({ locator }) {
+function SearchBar({ location }) {
   const [input, setInput] = useState("");
   const [barOpened, setBarOpened] = useState(false);
   const [searchSuccess, setSearchSuccess] = useState(false)
@@ -109,22 +109,22 @@ function SearchBar({ locator }) {
   }, [barOpened, map])
 
   useEffect(() => {
-    if(locator.searchLocation && locator.searchResult && searchSuccess) {
+    if(location.searchLocation && location.searchResult && searchSuccess) {
       const params = {
-        travelMethod: locator.travelMethod || 'driving-car',
+        travelMethod: location.travelMethod || 'driving-car',
         start: {
-          lat: locator.searchLocation.lat,
-          lng: locator.searchLocation.lon
+          lat: location.searchLocation.lat,
+          lng: location.searchLocation.lon
         },
         end: {
-          lat: locator.searchResult.locationProperties.lat,
-          lng: locator.searchResult.locationProperties.lng
+          lat: location.searchResult.locationProperties.lat,
+          lng: location.searchResult.locationProperties.lng
         }
       };
       setSearchSuccess(false);
       dispatch(getRoute(params));
     }
-  }, [locator, dispatch, searchSuccess]);
+  }, [location, dispatch, searchSuccess]);
   
   return (<>
       <Form

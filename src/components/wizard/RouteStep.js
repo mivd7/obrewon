@@ -121,7 +121,7 @@ const SubmitButton = styled.button`
 `;
 
 function RouteStep({ onDone }) {
-  const locator = useSelector(state => state.location);
+  const location = useSelector(state => state.location);
   const [showAllBreweries, setShowAllBreweries] = useState(false);
   const [currentLocation, setCurrentLocation] = useState('');
   const [travelMethod, setTravelMethod] = useState('driving-car');
@@ -130,32 +130,32 @@ function RouteStep({ onDone }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if(locator.searchLocation) {
+    if(location.searchLocation) {
       //await searchLocation then set input value to zipcode
-      setCurrentLocation(locator.searchLocation.postcode)
+      setCurrentLocation(location.searchLocation.postcode)
     }
-    if(locator.travelMethod) {
-      setTravelMethod(locator.travelMethod);
+    if(location.travelMethod) {
+      setTravelMethod(location.travelMethod);
     }
-  }, [locator])
+  }, [location])
 
   useEffect(() => {
-    if(locator.searchLocation && locator.searchResult && searchSuccess) {
+    if(location.searchLocation && location.searchResult && searchSuccess) {
       const params = {
-        travelMethod: locator.travelMethod || 'driving-car',
+        travelMethod: location.travelMethod || 'driving-car',
         start: {
-          lat: locator.searchLocation.lat,
-          lng: locator.searchLocation.lon
+          lat: location.searchLocation.lat,
+          lng: location.searchLocation.lon
         },
         end: {
-          lat: locator.searchResult.locationProperties.lat,
-          lng: locator.searchResult.locationProperties.lng
+          lat: location.searchResult.locationProperties.lat,
+          lng: location.searchResult.locationProperties.lng
         }
       };
       setSearchSuccess(false);
       dispatch(getRoute(params));
     }
-  }, [locator, dispatch, searchSuccess]);
+  }, [location, dispatch, searchSuccess]);
   
   useEffect(() => {
     if(showAllBreweries) {
@@ -192,11 +192,11 @@ function RouteStep({ onDone }) {
 
 
   return(<>
-    {locator.searchLocation && locator.searchResult && <>
+    {location.searchLocation && location.searchResult && <>
     <GridElement gridAutoFlow="row" columnStart="0" columnEnd="0" align="center">
       <Form>
-          <h2>Your nearest brewery is <span style={{color: '#f28e1c'}}>{locator.searchResult.name}</span> in <span style={{color: '#f28e1c'}}>{locator.searchResult.city}</span></h2>
-          {locator.route && locator.route.features && locator.route.features[0].properties.summary.distance && <p>Travel distance: {Math.round(locator.route.features[0].properties.summary.distance / 1000)} km</p>}
+          <h2>Your nearest brewery is <span style={{color: '#f28e1c'}}>{location.searchResult.name}</span> in <span style={{color: '#f28e1c'}}>{location.searchResult.city}</span></h2>
+          {location.route && location.route.features && location.route.features[0].properties.summary.distance && <p>Travel distance: {Math.round(location.route.features[0].properties.summary.distance / 1000)} km</p>}
           <Label>
             Change your location
             <Input 
@@ -248,16 +248,16 @@ function RouteStep({ onDone }) {
             {showAllBreweries ? <ToggleOnIcon/> : <ToggleOffIcon/>}
           </span>
         </SwitchContainer>
-        {showAllBreweries && locator.breweries && locator.breweries.map((brewery, index) => 
+        {showAllBreweries && location.breweries && location.breweries.map((brewery, index) => 
           <div key={brewery.name}>
-            <ListItem isOpen={locator.filteredBreweries.indexOf(brewery) !== -1}>
+            <ListItem isOpen={location.filteredBreweries.indexOf(brewery) !== -1}>
               <Title>{index + 1}. {brewery.name}</Title><br/>
               <span>{brewery.address}, {brewery.zipcode}, {brewery.city}</span><br/>
-              {locator.filteredBreweries.indexOf(brewery) !== -1 ? <span>Distance: {Math.round(brewery.distance)} km</span> : <span style={{color: 'red'}}>Not opened today!</span>}
+              {location.filteredBreweries.indexOf(brewery) !== -1 ? <span>Distance: {Math.round(brewery.distance)} km</span> : <span style={{color: 'red'}}>Not opened today!</span>}
               
             </ListItem>
           </div>)}
-        {!showAllBreweries && locator.filteredBreweries && locator.filteredBreweries.map((brewery, index) => <ListItem isOpen={locator.filteredBreweries.indexOf(brewery) !== -1} key={brewery.name}>
+        {!showAllBreweries && location.filteredBreweries && location.filteredBreweries.map((brewery, index) => <ListItem isOpen={location.filteredBreweries.indexOf(brewery) !== -1} key={brewery.name}>
           <Title>{index + 1}. {brewery.name}</Title><br/>
           <span>{brewery.address}, {brewery.zipcode}, {brewery.city}</span><br/>
           <span>Distance: {Math.round(brewery.distance)} km</span>

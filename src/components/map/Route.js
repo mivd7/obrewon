@@ -5,20 +5,20 @@ import { useSelector } from 'react-redux';
 const Route = () => {
   const map = useMap();
   const routeLayerRef = useRef();
-  const locator = useSelector(state => state.location);
+  const location = useSelector(state => state.location);
 
   useEffect(() => {
     //reset route geojson layer on every render route
-    if(!locator.route) {
+    if(!location.route) {
       map.removeLayer(routeLayerRef.current);
     } else {
       map.addLayer(routeLayerRef.current);
     }
-  }, [map, locator])
+  }, [map, location])
 
 
   return (<LayerGroup ref={routeLayerRef} name="route">
-   {locator && locator.route && <GeoJSON key="geojson-route" data={locator.route}/>}
+   {location && location.route && <GeoJSON key="geojson-route" data={location.route}/>}
     </LayerGroup>
   )
 }
