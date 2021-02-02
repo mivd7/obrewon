@@ -9,6 +9,7 @@ export const RESET_ROUTE = 'RESET_ROUTE';
 export const TRAVEL_METHOD_UPDATED = 'TRAVEL_METHOD_UPDATED';
 export const DISABLE_OPEN_FILTER = 'DISABLE_OPEN_FILTER';
 export const ENABLE_OPEN_FILTER = 'ENABLE_OPEN_FILTER';
+export const SEARCH_QUERY = 'SEARCH_QUERY';
 
 export function setBreweries(payload) {
   return {
@@ -45,12 +46,20 @@ export function updateTravelMethod(payload) {
   }
 }
 
+export function saveSearchQuery(payload) {
+  return {
+    type: SEARCH_QUERY,
+    payload
+  }
+}
+
 export const getLocationByAddress = (params) => {
   return (dispatch) => {
     return axios.get(`https://api.geoapify.com/v1/geocode/search?text=${params}&apiKey=${GEOAPIFY_API_KEY}`)
       .then(res => {
         if (res.data.features.length > 0) {
           dispatch(setInputLocation(res.data.features[0].properties));
+          dispatch(saveSearchQuery(params));
           return Promise.resolve('location fetched succesfully')
         } else {
           dispatch(setNotFoundError())

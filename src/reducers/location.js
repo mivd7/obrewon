@@ -1,10 +1,15 @@
-import { BREWERIES_SET, SEARCH_LOCATION_SET, INPUT_LOCATION_NOT_FOUND, ROUTE_SET, TRAVEL_METHOD_UPDATED, RESET_ROUTE, DISABLE_OPEN_FILTER, ENABLE_OPEN_FILTER } from '../actions/location';
+import { BREWERIES_SET, SEARCH_LOCATION_SET, INPUT_LOCATION_NOT_FOUND, ROUTE_SET, TRAVEL_METHOD_UPDATED, RESET_ROUTE, DISABLE_OPEN_FILTER, ENABLE_OPEN_FILTER, SEARCH_QUERY } from '../actions/location';
 import {sortBreweriesByDistance} from '../lib/calculator';
 
 export default function location(state = {}, action = {}) {
   switch (action.type) {
     case BREWERIES_SET:
       return {...state, breweries: action.payload, filteredBreweries: []};
+    case SEARCH_QUERY:
+      return {
+        ...state,
+        searchQuery: action.payload
+      }
     case SEARCH_LOCATION_SET:
       const dayIndex = new Date().getDay();
       const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];

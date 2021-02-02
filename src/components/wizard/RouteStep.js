@@ -123,21 +123,21 @@ const SubmitButton = styled.button`
 function RouteStep({ onDone }) {
   const location = useSelector(state => state.location);
   const [showAllBreweries, setShowAllBreweries] = useState(false);
-  const [currentLocation, setCurrentLocation] = useState('');
+  const [locationInputValue, setLocationInputValue] = useState('');
   const [travelMethod, setTravelMethod] = useState('driving-car');
   const [searchSuccess, setSearchSuccess] = useState(false)
   const [searchError, setSearchError] = useState(false)
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if(location.searchLocation) {
+    if(location.searchQuery && locationInputValue === '') {
       //await searchLocation then set input value to zipcode
-      setCurrentLocation(location.searchLocation.postcode)
+      setLocationInputValue(location.searchQuery)
     }
     if(location.travelMethod) {
       setTravelMethod(location.travelMethod);
     }
-  }, [location])
+  }, [location, locationInputValue])
 
   useEffect(() => {
     if(location.searchLocation && location.searchResult && searchSuccess) {
@@ -157,37 +157,35 @@ function RouteStep({ onDone }) {
     }
   }, [location, dispatch, searchSuccess]);
   
-  useEffect(() => {
-    if(showAllBreweries) {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if(locationInputValue) {
+      dispatch(updateTravelMethod(travelMethod)); 
+      dispatch({type: 'RESET_ROUTE'});    
+      dispatch(getLocationByAddress(locationInputValue))
+        .then((result) => {
+          if(result) {
+            setSearchError(false);
+            setSearchSuccess(true)
+          } else {
+            setSearchSuccess(false);
+            setSearchError(true)
+          }
+        })
+        .then(() => {
+          if(!searchError) {
+            onDone(true)
+          }
+        })
+    }
+  }
+
+  const toggleOpenFilter = (showAll) => {
+    if(showAll) {
       dispatch({type: 'DISABLE_OPEN_FILTER'})
     } else {
       dispatch({type: 'ENABLE_OPEN_FILTER'})
     }
-  }, [showAllBreweries, dispatch])
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(updateTravelMethod(travelMethod)); 
-    dispatch({type: 'RESET_ROUTE'});
-    dispatch(getLocationByAddress(currentLocation))
-      .then((result) => {
-        if(result) {
-          setSearchError(false);
-          setSearchSuccess(true)
-        } else {
-          setSearchSuccess(false);
-          setSearchError(true)
-        }
-      })
-      .then(() => {
-        if(!searchError) {
-          onDone(true)
-        }
-      })
-  }
-
-  const toggleOpenFilter = () => {
-    setShowAllBreweries(!showAllBreweries)
   }
 
 
@@ -195,14 +193,17 @@ function RouteStep({ onDone }) {
     {location.searchLocation && location.searchResult && <>
     <GridElement gridAutoFlow="row" columnStart="0" columnEnd="0" align="center">
       <Form>
-          <h2>Your nearest brewery is <span style={{color: '#f28e1c'}}>{location.searchResult.name}</span> in <span style={{color: '#f28e1c'}}>{location.searchResult.city}</span></h2>
+          <h2>Your nearest brewery is 
+            <span style={{color: '#f28e1c'}}>{location.searchResult.name}</span> in <span style={{color: '#f28e1c'}}>{location.searchResult.city}</span>
+            {location.filteredBreweries.indexOf(location.searchResult) === -1 && <span> but it's not opened today!</span>}</h2>
+          
           {location.route && location.route.features && location.route.features[0].properties.summary.distance && <p>Travel distance: {Math.round(location.route.features[0].properties.summary.distance / 1000)} km</p>}
           <Label>
             Change your location
             <Input 
               color={searchError ? '#ff523f' : '#141414'}
-              value={currentLocation}
-              onChange={e => setCurrentLocation(e.target.value)}
+              value={locationInputValue}
+              onChange={e => setLocationInputValue(e.target.value)}
               type="text" />
           </Label><br/>
           <Label>
@@ -244,7 +245,10 @@ function RouteStep({ onDone }) {
       <List>
         <h2>{!showAllBreweries ? 'Closest Breweries Open Today' : 'Closest Breweries'}</h2>
         <SwitchContainer>
-          <span onClick={() => toggleOpenFilter()}>
+          <span onClick={() => {
+            setShowAllBreweries(!showAllBreweries);
+            toggleOpenFilter(!showAllBreweries)
+          }}>
             {showAllBreweries ? <ToggleOnIcon/> : <ToggleOffIcon/>}
           </span>
         </SwitchContainer>
