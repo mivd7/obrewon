@@ -7,10 +7,10 @@ The app for thirsty beer lovers, which will help you find the closest brewery ne
 3. Run the app: `npm run start` || `yarn start`
 
 ### Feature list
-This app originally had one requirement which was to find the closest brewery given a certain zipcode input. I decided to extend this to with map and directions functionality, because recently I had dived into the Leaflet library and thought it would be perfect for this project. Here's the feature list as I defined them at the start, based on user stories.
+This app originally had one requirement which was to find the closest brewery given a certain zipcode input. I decided to extend this with map and directions functionality, because recently I had dived into the Leaflet library and thought it would be perfect for the goal of this project. Here's the feature list as I defined them at the start, based on user stories.
 
  - Find the closest brewery based on zipcode input
- - See location of all breweries on map, highlight the one closest
+ - See location of all breweries on map, highlight the one closest when found
  - See location of own zipcode input + closest found brewery on a map
  - Know the distance between the input location and the brewery location
  - Automatically set user location based on browser geolocation API (if allowed)
@@ -47,7 +47,7 @@ Because the challenge was to make this in one week, there's obviously still feat
 
  - The app could be made more mobile-friendly, or even turned into a full native mobile app.
  - Track your GPS location changes as you move about to track your route. 
- - Be able to not just get a route to closest brewery but also other breweries if you want
+ - Be able to not just get a route to closest open brewery but also other breweries if you want
  - Have a backend that stores data about the user so it remembers when you revisit the app
- - After finding a route, be able to share a link which loads the app and shows the route
+ - After finding a route, be able to share a link with other beer loving friends which automatically loads the app and shows the route
  - Add unit tests and end-to-end tests to ensure performance of the app
