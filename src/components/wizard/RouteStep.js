@@ -57,7 +57,7 @@ const Input = styled.input`
   outline: none;
   padding: 0 5px;
   font-size: 14px;
-  color: #141414;
+  color: ${props => props.color};
 `;
 
 const Label = styled.label`
@@ -122,6 +122,8 @@ function RouteStep({ onDone }) {
   const [showAllBreweries, setShowAllBreweries] = useState(false);
   const [currentLocation, setCurrentLocation] = useState('');
   const [travelMethod, setTravelMethod] = useState('driving-car');
+  const [searchSuccess, setSearchSuccess] = useState(false)
+  const [searchError, setSearchError] = useState(false)
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -135,20 +137,9 @@ function RouteStep({ onDone }) {
   }, [locator])
 
   useEffect(() => {
-    if(showAllBreweries) {
-      dispatch({type: 'DISABLE_OPEN_FILTER'})
-    } else {
-      dispatch({type: 'ENABLE_OPEN_FILTER'})
-    }
-  }, [showAllBreweries, dispatch])
-
-  const handleSubmit = () => {
-    dispatch(updateTravelMethod(travelMethod)); 
-    dispatch({type: 'RESET_ROUTE'});
-    dispatch(getLocationByAddress(currentLocation)).then(() => {
-      console.log(travelMethod);
+    if(locator.searchLocation && locator.searchResult && searchSuccess) {
       const params = {
-        travelMethod: travelMethod,
+        travelMethod: locator.travelMethod || 'driving-car',
         start: {
           lat: locator.searchLocation.lat,
           lng: locator.searchLocation.lon
@@ -158,10 +149,38 @@ function RouteStep({ onDone }) {
           lng: locator.searchResult.locationProperties.lng
         }
       };
-      console.log('get with params', params)
+      setSearchSuccess(false);
       dispatch(getRoute(params));
-    });
-    onDone(true);
+    }
+  }, [locator, dispatch, searchSuccess]);
+  
+  useEffect(() => {
+    if(showAllBreweries) {
+      dispatch({type: 'DISABLE_OPEN_FILTER'})
+    } else {
+      dispatch({type: 'ENABLE_OPEN_FILTER'})
+    }
+  }, [showAllBreweries, dispatch])
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(updateTravelMethod(travelMethod)); 
+    dispatch({type: 'RESET_ROUTE'});
+    dispatch(getLocationByAddress(currentLocation))
+      .then((result) => {
+        if(result) {
+          setSearchError(false);
+          setSearchSuccess(true)
+        } else {
+          setSearchSuccess(false);
+          setSearchError(true)
+        }
+      })
+      .then(() => {
+        if(!searchError) {
+          onDone(true)
+        }
+      })
   }
 
   const toggleOpenFilter = () => {
@@ -180,6 +199,7 @@ function RouteStep({ onDone }) {
           <Label>
             Change your location
             <Input 
+              color={searchError ? '#ff523f' : '#141414'}
               value={currentLocation}
               onChange={e => setCurrentLocation(e.target.value)}
               type="text" />
@@ -214,7 +234,7 @@ function RouteStep({ onDone }) {
             type="submit" 
             buttonColor={'#eeeeee'}
             buttonTextColor={'#f28e1c'}
-            onClick={handleSubmit}>
+            onClick={e => handleSubmit(e)}>
             Show Route
           </SubmitButton>
         </Form>
