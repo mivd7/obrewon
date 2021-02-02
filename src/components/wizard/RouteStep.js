@@ -120,9 +120,10 @@ const SubmitButton = styled.button`
   cursor: pointer;
 `;
 
-function RouteStep({ onDone }) {
+function RouteStep({ onDone, fromWizard }) {
   const location = useSelector(state => state.location);
   const [showAllBreweries, setShowAllBreweries] = useState(false);
+  const [userTyping, setUserTyping] = useState(false)
   const [locationInputValue, setLocationInputValue] = useState('');
   const [travelMethod, setTravelMethod] = useState('driving-car');
   const [searchSuccess, setSearchSuccess] = useState(false)
@@ -130,14 +131,14 @@ function RouteStep({ onDone }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if(location.searchQuery && locationInputValue === '') {
+    if(location.searchQuery && !userTyping && locationInputValue === '') {
       //await searchLocation then set input value to zipcode
-      setLocationInputValue(location.searchQuery)
+      setLocationInputValue(location.searchQuery);
     }
     if(location.travelMethod) {
       setTravelMethod(location.travelMethod);
     }
-  }, [location, locationInputValue])
+  }, [location, userTyping, locationInputValue])
 
   useEffect(() => {
     if(location.searchLocation && location.searchResult && searchSuccess) {
@@ -203,7 +204,13 @@ function RouteStep({ onDone }) {
             <Input 
               color={searchError ? '#ff523f' : '#141414'}
               value={locationInputValue}
-              onChange={e => setLocationInputValue(e.target.value)}
+              onChange={e => {
+                setUserTyping(true);
+                setLocationInputValue(e.target.value)
+              }}
+              onBlur={e => {
+                setUserTyping(false);
+              }}
               type="text" />
           </Label><br/>
           <Label>
