@@ -1,13 +1,14 @@
 import { useState } from "react"
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getLocationByAddress } from "../../actions/location";
+import { setUserLocation } from "../../actions/user";
 import { Box, ConfirmButton, Form, Input, SearchButton } from "./SetupWizard.style";
 
-function LocationStep({user, onLocationConfirmed}) {
+function LocationStep({onLocationConfirmed}) {
   const [addressIncorrect, setAddressIncorrect] = useState(false);
   const [address, setAddress] = useState('');
   const dispatch = useDispatch();
-
+  const user = useSelector(state => state.user);
   const onClick = (confirmed) => {
       if(confirmed) {
         console.log()
@@ -20,8 +21,10 @@ function LocationStep({user, onLocationConfirmed}) {
   }
   
   const submitCorrectedAddress = () => {
-    dispatch(getLocationByAddress(address))
-    onLocationConfirmed();
+    dispatch(setUserLocation(address));
+    dispatch(getLocationByAddress(address)).then(() => {
+      onLocationConfirmed();
+    })
   }
 
   return(<Box> 

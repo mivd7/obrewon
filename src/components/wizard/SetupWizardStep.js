@@ -12,17 +12,12 @@ function WelcomeStep() {
   </Box>)
 }
 
-export const SetupWizardStep = ({step, user, handleNext, closeWizard}) => {
+export const SetupWizardStep = ({step, handleNext, closeWizard}) => {
   //user has to have a location
-  const [locationStepDone, setLocationStepDone] = useState(false);
   return (<>
     {step === 'welcome' && <WelcomeStep/>}
-    {step === 'location' && <LocationStep user={user} onLocationConfirmed={() => {
-      setLocationStepDone(true);
-      handleNext();
-    }}/>}
-    {step === 'route' && locationStepDone && <RouteStep onDone={closeWizard} user={user}/>}
-    {step === 'route' && !locationStepDone && <p>You didn't set your location yet. Please go back a step and tell O'Brewon where you're at</p>}
+    {step === 'location' && <LocationStep onLocationConfirmed={handleNext}/>}
+    {step === 'route' && <RouteStep onDone={closeWizard}/>}
   </>);
 }
 

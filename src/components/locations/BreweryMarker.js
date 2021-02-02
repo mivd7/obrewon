@@ -21,7 +21,9 @@ function BreweryMarker({ markerPosition, brewery, closest }) {
           },
         }}>
         <Popup>
-          {brewery.name}
+          <h3>{brewery.name}</h3>
+          <p>{brewery.address}</p>
+          {brewery.zipcode}, {brewery.city}
         </Popup>
       </Marker>
   </>)

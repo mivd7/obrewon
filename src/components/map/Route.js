@@ -16,6 +16,7 @@ const Route = () => {
     }
   }, [map, locator])
 
+
   return (<LayerGroup ref={routeLayerRef} name="route">
    {locator && locator.route && <GeoJSON key="geojson-route" data={locator.route}/>}
     </LayerGroup>

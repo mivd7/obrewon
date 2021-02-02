@@ -65,3 +65,7 @@ section {
   align-items: center;
   justify-items: center;
 }
+
+.leaflet-popup-content p {
+  margin: 0;
+}

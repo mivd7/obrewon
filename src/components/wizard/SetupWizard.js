@@ -32,6 +32,11 @@ const SetupWizard = ({ showModal, closeWizard }) => {
     }
   }
 
+  const checkLocationSet = () => {
+    if(!user.locationLoading && !user.locationError) {
+      handleNext();
+    }
+  }
   const animation = useSpring({
     config: {
       duration: 250
@@ -60,7 +65,6 @@ const SetupWizard = ({ showModal, closeWizard }) => {
               <GridElement gridAutoFlow="column" align="center">
                 <SetupWizardStep 
                   step={steps[stepIndex]} 
-                  user={user} 
                   handleNext={handleNext} 
                   closeWizard={() => {
                     setShow(false)
@@ -75,7 +79,12 @@ const SetupWizard = ({ showModal, closeWizard }) => {
                   <p>Step {stepIndex + 1} of {steps.length}</p>
                 </Box>
                 <Box>
-                  <NextButton onClick={handleNext} color={(stepIndex + 1) === steps.length ? "#eeeeee" : "#f28e1c"}/>
+                  <NextButton onClick={() => {
+                    if(steps[stepIndex] !== 'location'){
+                      handleNext();
+                    } else {
+                      checkLocationSet();
+                    }}} color={(stepIndex + 1) === steps.length ? "#eeeeee" : "#f28e1c"}/>
                 </Box>
               </GridElement>
             </ModalWrapper>

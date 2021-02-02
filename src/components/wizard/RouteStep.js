@@ -8,12 +8,15 @@ import { getLocationByAddress, getRoute, updateTravelMethod } from '../../action
 
 const List = styled.ul`
   position: relative;
+  max-height: 400px;
   list-style: none;
   padding: 0px 10px;
   background-color: #fff;
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
   border-left: 1px solid black;
+  overflow:hidden; 
+  overflow-y:scroll;
   h2 {
     color: #f28e1c
   }
@@ -43,7 +46,7 @@ const Form = styled.form`
   width: 75%;
   align-items: space-between;
   text-align: left;
-  h2 {
+  h2, p {
     color: #777;
     gap: 0;
   }
@@ -196,6 +199,7 @@ function RouteStep({ onDone }) {
     <GridElement gridAutoFlow="row" columnStart="0" columnEnd="0" align="center">
       <Form>
           <h2>Your nearest brewery is <span style={{color: '#f28e1c'}}>{locator.searchResult.name}</span> in <span style={{color: '#f28e1c'}}>{locator.searchResult.city}</span></h2>
+          {locator.route && locator.route.features && locator.route.features[0].properties.summary.distance && <p>Travel distance: {Math.round(locator.route.features[0].properties.summary.distance / 1000)} km</p>}
           <Label>
             Change your location
             <Input 
@@ -247,7 +251,7 @@ function RouteStep({ onDone }) {
             {showAllBreweries ? <ToggleOnIcon/> : <ToggleOffIcon/>}
           </span>
         </SwitchContainer>
-        {showAllBreweries && locator.breweries && locator.breweries.slice(0, 5).map((brewery, index) => 
+        {showAllBreweries && locator.breweries && locator.breweries.map((brewery, index) => 
           <div key={brewery.name} onClick={getRouteToBrewery}>
             <ListItem isOpen={locator.filteredBreweries.indexOf(brewery) !== -1}>
               <Title>{index + 1}. {brewery.name}</Title><br/>
@@ -256,7 +260,7 @@ function RouteStep({ onDone }) {
               
             </ListItem>
           </div>)}
-        {!showAllBreweries && locator.filteredBreweries && locator.filteredBreweries.slice(0, 5).map((brewery, index) => <ListItem isOpen={locator.filteredBreweries.indexOf(brewery) !== -1} key={brewery.name}>
+        {!showAllBreweries && locator.filteredBreweries && locator.filteredBreweries.map((brewery, index) => <ListItem isOpen={locator.filteredBreweries.indexOf(brewery) !== -1} key={brewery.name}>
           <Title>{index + 1}. {brewery.name}</Title><br/>
           <span>{brewery.address}, {brewery.zipcode}, {brewery.city}</span><br/>
           <span>Distance: {Math.round(brewery.distance)} km</span>

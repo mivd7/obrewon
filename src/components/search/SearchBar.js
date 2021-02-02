@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useMap } from "react-leaflet";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import {Search} from '@styled-icons/material';
 import { getLocationByAddress, getRoute } from "../../actions/location";
 
 const Form = styled.form`
@@ -38,6 +39,7 @@ const Input = styled.input`
   }
   &::placeholder {
     color: #eeeee;
+    font-size: 16px;
   }
 `;
 
@@ -52,6 +54,13 @@ const SearchButton = styled.button`
   font-size: 14px;
   color: ${props => props.buttonTextColor}
 `;
+
+const SearchIcon = styled(Search)`
+  color: black;
+  width: 2.5rem;
+  height: 2.5rem;
+  cursor: pointer;
+`
 
 function SearchBar({ locator }) {
   const [input, setInput] = useState("");
@@ -126,15 +135,18 @@ function SearchBar({ locator }) {
             inputFocus.current.focus();
           }
         }}
+        onBlur={() => {
+          setBarOpened(false);
+        }}
         onSubmit={onFormSubmit}
         formColorPrimary={searchError ? '#ffcccc' : '#eee'}
-        formColorSecondary={searchError ? '#ff523f' : '#f28e1c'}>
+        formColorSecondary={searchError ? '#ff523f' : '#141414'}>
         {!barOpened && 
         <SearchButton 
           type="submit" 
           barOpened={barOpened}
-          buttonTextColor={'#f28e1c'}>
-          Click to search
+          buttonTextColor={'#141414'}>
+          <SearchIcon/>
         </SearchButton>}
        { barOpened && <Input
           onChange={e => {
@@ -145,7 +157,7 @@ function SearchBar({ locator }) {
           value={input}
           barOpened={barOpened}
           color={searchError ? '#ff523f' : '#141414'}
-          placeholder="Search by postcode, address or city"
+          placeholder="Search closest brewery by postcode, address or city"
         />}
       </Form>
       
