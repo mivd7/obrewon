@@ -11,7 +11,7 @@ function LocationStep({onLocationConfirmed}) {
   const user = useSelector(state => state.user);
   const onClick = (confirmed) => {
       if(confirmed) {
-        dispatch(getLocationByAddress(user.address.formatted)).then;
+        dispatch(getLocationByAddress(user.address.formatted))
         setAddressIncorrect(false);
         onLocationConfirmed();
       } else {
