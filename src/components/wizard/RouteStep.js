@@ -194,7 +194,7 @@ function RouteStep({ onDone }) {
     <GridElement gridAutoFlow="row" columnStart="0" columnEnd="0" align="center">
       <Form>
           <h2>Your nearest brewery is 
-            <span style={{color: '#f28e1c'}}>{location.searchResult.name}</span> in <span style={{color: '#f28e1c'}}>{location.searchResult.city}</span>
+            <span style={{color: '#f28e1c'}}> {location.searchResult.name}</span> in <span style={{color: '#f28e1c'}}>{location.searchResult.city}</span>
             {location.filteredBreweries.indexOf(location.searchResult) === -1 && <span> but it's not opened today!</span>}</h2>
           
           {location.route && location.route.features && location.route.features[0].properties.summary.distance && <p>Travel distance: {Math.round(location.route.features[0].properties.summary.distance / 1000)} km</p>}
